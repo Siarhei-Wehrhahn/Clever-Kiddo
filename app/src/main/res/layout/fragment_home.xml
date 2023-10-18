@@ -55,25 +55,48 @@
         app:layout_constraintTop_toBottomOf="@+id/numberGame" />
 
     <Button
-        android:id="@+id/whereIsTheVegetables"
+        android:id="@+id/cats"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/teal"
-        android:text="@string/vegetableGame"
+        android:text="@string/katzen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dogs" />
 
     <Button
-        android:id="@+id/whereIsTheFruit"
+        android:id="@+id/whereIsTheVegetables2"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/teal"
         android:layout_marginTop="24dp"
-        android:text="@string/fruitGame"
+        android:backgroundTint="@color/navy"
+        android:text="@string/vegetableGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cats" />
+
+    <Button
+        android:id="@+id/petsDataBase"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/red"
+        android:text="@string/meine_lieblingstiere"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whereIsTheVegetables" />
+        app:layout_constraintTop_toBottomOf="@+id/whereIsTheFruit" />
+
+    <Button
+        android:id="@+id/whereIsTheFruit"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/violet"
+        android:text="@string/fruitGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/whereIsTheVegetables2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

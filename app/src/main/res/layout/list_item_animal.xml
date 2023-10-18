@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/light">
 
     <ImageView
         android:id="@+id/imageDog"
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/n02105056_4361" />
@@ -21,17 +22,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:backgroundTint="@color/maroon"
-        android:text="Dowload"
+        android:text="Download      "
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageDog" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/imageViewDownload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
+        android:layout_marginEnd="42dp"
         app:layout_constraintBottom_toBottomOf="@+id/buttonDownload"
         app:layout_constraintEnd_toEndOf="@+id/buttonDownload"
         app:layout_constraintTop_toTopOf="@+id/buttonDownload"

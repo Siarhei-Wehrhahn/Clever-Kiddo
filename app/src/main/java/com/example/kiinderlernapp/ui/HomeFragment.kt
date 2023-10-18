@@ -29,8 +29,16 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_colorFragment)
         }
 
+        binding.cats.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_catsFragment)
+        }
+
         binding.dogs.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_dogsFragment)
+        }
+
+        binding.petsDataBase.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_favoritePetsFragment)
         }
     }
 }

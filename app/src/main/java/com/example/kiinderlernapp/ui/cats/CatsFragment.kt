@@ -1,4 +1,4 @@
-package com.example.kiinderlernapp.ui.dogs
+package com.example.kiinderlernapp.ui.cats
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,14 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.example.kiinderlernapp.adapter.AnimalAdapter
-import com.example.kiinderlernapp.databinding.FragmentDogsBinding
+import com.example.kiinderlernapp.databinding.FragmentCatsBinding
 import com.example.kiinderlernapp.ui.MainViewModel
 import kotlinx.coroutines.launch
 
-class DogsFragment : Fragment() {
+class CatsFragment : Fragment() {
 
-    private lateinit var binding : FragmentDogsBinding
+    private lateinit var binding: FragmentCatsBinding
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -23,21 +24,22 @@ class DogsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDogsBinding.inflate(inflater,container,false)
+        binding = FragmentCatsBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            viewModel.loadDataDogs()
+            viewModel.loadDataCats()
         }
 
-        viewModel.dogs.observe(viewLifecycleOwner) {
-            binding.recyclerView.adapter = AnimalAdapter(it,viewModel)
+        viewModel.cats.observe(viewLifecycleOwner) {
+            binding.recyclerViewCats.adapter = AnimalAdapter(it, viewModel)
         }
+
 
         val pagerSnapHelper = PagerSnapHelper()
-        pagerSnapHelper.attachToRecyclerView(binding.recyclerView)
+        pagerSnapHelper.attachToRecyclerView(binding.recyclerViewCats)
     }
 }

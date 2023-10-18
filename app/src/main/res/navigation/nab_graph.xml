@@ -25,6 +25,12 @@
         <action
             android:id="@+id/action_homeFragment_to_dogsFragment"
             app:destination="@id/dogsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_catsFragment"
+            app:destination="@id/catsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoritePetsFragment"
+            app:destination="@id/favoritePetsFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -42,6 +48,24 @@
         tools:layout="@layout/fragment_dogs" >
         <action
             android:id="@+id/action_dogsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/catsFragment"
+        android:name="com.example.kiinderlernapp.ui.cats.CatsFragment"
+        android:label="fragment_cats"
+        tools:layout="@layout/fragment_cats" >
+        <action
+            android:id="@+id/action_catsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritePetsFragment"
+        android:name="com.example.kiinderlernapp.ui.FavoritePetsFragment"
+        android:label="fragment_favorite_pets"
+        tools:layout="@layout/fragment_favorite_pets" >
+        <action
+            android:id="@+id/action_favoritePetsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

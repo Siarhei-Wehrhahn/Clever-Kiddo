@@ -1,6 +1,9 @@
 package com.example.kiinderlernapp.data.remoute
 
 import android.os.Message
+import com.example.kiinderlernapp.data.datamodels.Animal
+import com.example.kiinderlernapp.data.datamodels.cats.Cat
+import com.example.kiinderlernapp.data.datamodels.cats.Cats
 import com.example.kiinderlernapp.data.datamodels.dog.Dogs
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -9,7 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
 const val DOG_URL = "https://dog.ceo/"
-const val CAT_URL = "https://second.api.base.url/"
+const val CAT_URL = "https://api.thecatapi.com/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -33,8 +36,8 @@ interface DogApiService {
 
 interface CatApiService {
 
-    @GET("images/search?limit=100")
-    suspend fun getCats(): com.example.kiinderlernapp.data.datamodels.cat.Response
+    @GET("v1/images/search?limit=50")
+    suspend fun getCats(): List<Cat>
 }
 
 object DogApi {

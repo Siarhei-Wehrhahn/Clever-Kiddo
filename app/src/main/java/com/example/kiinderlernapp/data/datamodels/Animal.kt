@@ -1,10 +1,10 @@
-package com.example.kiinderlernapp.data.datamodels.dog
+package com.example.kiinderlernapp.data.datamodels
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class Dog(
+@Entity("animal_database")
+data class Animal(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int,
