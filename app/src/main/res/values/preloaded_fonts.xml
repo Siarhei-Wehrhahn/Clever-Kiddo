@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/advent_pro_thin</item>
+        <item>@font/aladin</item>
+        <item>@font/allan</item>
+        <item>@font/almendra</item>
+        <item>@font/architects_daughter</item>
+        <item>@font/condiment</item>
+        <item>@font/courgette</item>
+        <item>@font/della_respira</item>
+    </array>
+</resources>

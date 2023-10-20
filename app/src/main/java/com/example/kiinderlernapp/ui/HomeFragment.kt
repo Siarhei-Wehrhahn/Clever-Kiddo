@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.kiinderlernapp.R
+import com.example.kiinderlernapp.data.score
 import com.example.kiinderlernapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,12 +28,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.textScore.text = score.toString()
+
         binding.colorGame.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_colorFragment)
         }
 
-        binding.cats.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_catsFragment)
+        binding.numberGame.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_numberFragment)
         }
 
         binding.dogs.setOnClickListener {

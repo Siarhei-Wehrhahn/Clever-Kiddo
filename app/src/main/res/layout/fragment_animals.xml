@@ -5,13 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light"
-    tools:context=".ui.cats.CatsFragment">
+    tools:context=".ui.animals.AnimalsFragment">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="800dp"
+        android:layout_height="800dp"
+        android:src="@drawable/a_background_for_kids_wich_have_many_colors_and_maybe_small_comic_dogs_and_cats_and_the_pets_are_in__3566878771"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textHeader2"
+        android:id="@+id/textHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/app_name"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,15 +28,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCats"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="590dp"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textHeader2"
+        app:layout_constraintTop_toBottomOf="@+id/textHeader"
         tools:itemCount="30"
         tools:listitem="@layout/list_item_animal" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

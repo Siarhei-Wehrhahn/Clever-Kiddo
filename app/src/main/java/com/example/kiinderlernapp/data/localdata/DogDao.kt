@@ -16,7 +16,7 @@ interface DogDao {
     suspend fun insertItem(animal: Animal)
 
     @Query("SELECT * FROM animal_database")
-    fun getAll(): LiveData<List<Animal>>
+    suspend fun getAll(): List<Animal>
 
     @Update
     suspend fun update(animal: Animal)
@@ -25,5 +25,5 @@ interface DogDao {
     suspend fun deleteAll()
 
     @Query("DELETE FROM animal_database WHERE id = :id")
-    suspend fun delette(id: Long)
+    fun delete(id: Int)
 }

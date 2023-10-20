@@ -24,13 +24,13 @@
             app:destination="@id/colorFragment" />
         <action
             android:id="@+id/action_homeFragment_to_dogsFragment"
-            app:destination="@id/dogsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_catsFragment"
-            app:destination="@id/catsFragment" />
+            app:destination="@id/animalFragment" />
         <action
             android:id="@+id/action_homeFragment_to_favoritePetsFragment"
             app:destination="@id/favoritePetsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_numberFragment"
+            app:destination="@id/numberFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -42,22 +42,16 @@
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/dogsFragment"
-        android:name="com.example.kiinderlernapp.ui.dogs.DogsFragment"
-        android:label="fragment_dogs"
-        tools:layout="@layout/fragment_dogs" >
+        android:id="@+id/animalFragment"
+        android:name="com.example.kiinderlernapp.ui.animals.AnimalsFragment"
+        android:label="fragment_animals"
+        tools:layout="@layout/fragment_animals">
         <action
-            android:id="@+id/action_dogsFragment_to_homeFragment"
+            android:id="@+id/action_animalFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/catsFragment"
-        android:name="com.example.kiinderlernapp.ui.cats.CatsFragment"
-        android:label="fragment_cats"
-        tools:layout="@layout/fragment_cats" >
         <action
-            android:id="@+id/action_catsFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_animalFragment_to_winningFragment"
+            app:destination="@id/winningFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritePetsFragment"
@@ -67,5 +61,29 @@
         <action
             android:id="@+id/action_favoritePetsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/numberFragment"
+        android:name="com.example.kiinderlernapp.ui.numberGame.NumberFragment"
+        android:label="fragment_number"
+        tools:layout="@layout/fragment_number" >
+        <action
+            android:id="@+id/action_numberFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_numberFragment_to_winningFragment"
+            app:destination="@id/winningFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/winningFragment"
+        android:name="com.example.kiinderlernapp.ui.numberGame.WinningFragment"
+        android:label="fragment_winning"
+        tools:layout="@layout/fragment_winning" >
+        <action
+            android:id="@+id/action_winningFragment_to_numberFragment"
+            app:destination="@id/numberFragment" />
+        <action
+            android:id="@+id/action_winningFragment_to_dogsFragment"
+            app:destination="@id/animalFragment" />
     </fragment>
 </navigation>

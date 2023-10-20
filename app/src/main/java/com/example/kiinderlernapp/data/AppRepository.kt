@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.kiinderlernapp.data.datamodels.Animal
 import com.example.kiinderlernapp.data.localdata.DataBase
-import com.example.kiinderlernapp.data.localdata.DogDao
 import com.example.kiinderlernapp.data.remoute.CatApi
 import com.example.kiinderlernapp.data.remoute.DogApi
 
@@ -21,30 +20,31 @@ class AppRepository(
     val cats: LiveData<List<Animal>>
         get() = _cats
 
-    private val _dogs = MutableLiveData<List<Animal>>()
-    val dogs: LiveData<List<Animal>>
-        get() = _dogs
+    private val _animals = MutableLiveData<List<Animal>>()
+    val animals: LiveData<List<Animal>>
+        get() = _animals
 
-    suspend fun getCats() {
+    private val _dataset = MutableLiveData<List<Animal>>()
+    val dataset: LiveData<List<Animal>>
+        get() = _dataset
+
+    suspend fun getDatabase() {
         try {
-            var list = mutableListOf<Animal>()
-            val urls = catApi.retrofitService.getCats()
-            repeat(urls.size -1) {
-                list.add(Animal(0,urls[it].url))
-            }
-            _cats.value = list
+            _dataset.postValue(database.dogDatabseDao.getAll())
         } catch (e: Exception) {
             Log.e("$log", "${e.message}")
         }
     }
 
-    suspend fun getDogs() {
+    suspend fun getAnimals() {
         try {
             var list = mutableListOf<Animal>()
-            repeat(50) {
+            val urls = catApi.retrofitService.getCats()
+            repeat(1) {
                 list.add(Animal(0,dogApi.retrofitService.getDogs().message))
+                list.add(Animal(0,urls[it].url))
             }
-            _dogs.value = list.toList()
+            _animals.postValue(list.toList())
         } catch (e: Exception) {
             Log.e("$log", "${e.message}")
         }
@@ -54,16 +54,15 @@ class AppRepository(
         try {
             database.dogDatabseDao.insertItem(animal)
         } catch (e: Exception) {
-            Log.e("AppRepository", "${e.message}")
+            Log.e("$log", "${e.message}")
         }
     }
 
-    // Für die Datenbank
-    fun getAll() {
+    fun deleteById(id: Int) {
         try {
-            database.dogDatabseDao.getAll()
+            database.dogDatabseDao.delete(id)
         } catch (e: Exception) {
-            Log.e("AppRepository", "${e.message}")
+            Log.e("$log", "${e.message}")
         }
     }
 }

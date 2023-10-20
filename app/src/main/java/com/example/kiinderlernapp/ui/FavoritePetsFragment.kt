@@ -19,13 +19,20 @@ class FavoritePetsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentFavoritePetsBinding.inflate(inflater,container,false)
+        binding = FragmentFavoritePetsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewmodel.getDatabase()
 
-        //TODO Recyclerview inizialisieren möglicherweise mit einem observer
+        // TODO eine großere ansicht erstellen von den bildern
+
+
+
+        viewmodel.dataset.observe(viewLifecycleOwner) {
+            binding.recyclerViewFavo.adapter = FavoritePetAdapter(it, viewmodel)
+        }
     }
 }

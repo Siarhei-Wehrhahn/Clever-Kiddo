@@ -11,6 +11,7 @@ import com.example.kiinderlernapp.data.datamodels.Animal
 import com.example.kiinderlernapp.data.localdata.DataBase
 import com.example.kiinderlernapp.data.remoute.CatApi
 import com.example.kiinderlernapp.data.remoute.DogApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,36 +24,35 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val textToSpeach: LiveData<String>
         get() = _textToSpeach
 
-    //TODO Livedata für die datenbank machen
-
-    val cats = repo.cats
-    val dogs = repo.dogs
+    val animals = repo.animals
+    val dataset = repo.dataset
 
     fun insert(animal: Animal) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.InsertAnimals(animal)
         }
     }
 
-    fun loadDataCats() {
-        viewModelScope.launch {
-            repo.getCats()
-        }
-    }
-
-    suspend fun loadDataDogs() {
-        viewModelScope.launch {
-            repo.getDogs()
-        }
-    }
-
-    fun loadDb() {
-        viewModelScope.launch {
-            repo.getAll()
+    fun loadDataAnimals() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getAnimals()
         }
     }
 
     fun textToSpeach(text: String) {
         _textToSpeach.value = text
+    }
+
+    //TODO Livedata für die datenbank machen
+    fun getDatabase() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getDatabase()
+        }
+    }
+
+    fun deleteById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteById(id)
+        }
     }
 }

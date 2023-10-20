@@ -7,6 +7,16 @@
     android:background="@color/light"
     tools:context=".ui.FavoritePetsFragment">
 
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="800dp"
+        android:layout_height="800dp"
+        android:src="@drawable/a_background_for_kids_wich_have_many_colors_and_maybe_small_comic_dogs_and_cats_and_the_pets_are_in__3566878771"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
@@ -25,7 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:spanCount="3"
+        app:spanCount="2"
+        android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

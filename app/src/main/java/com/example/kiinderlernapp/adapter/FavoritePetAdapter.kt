@@ -32,8 +32,16 @@ class FavoritePetAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         var animal = dataset[position]
-        holder.binding.imageViewPet.setImageURI(animal.imageRecource.toUri())
+        holder.binding.imageViewPet.load(animal.imageRecource){
+            error(R.drawable.false_2061131_1280)
+            transformations(RoundedCornersTransformation(10f))
+        }
 
-
+        // TODO Die fun klappt nicht so ganz
+        holder.binding.imageDelete.setOnClickListener {
+            viewModel.deleteById(animal.id)
+            notifyDataSetChanged()
+            viewModel.getDatabase()
+        }
     }
 }

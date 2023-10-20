@@ -7,6 +7,16 @@
     android:background="@color/light"
     tools:context=".ui.HomeFragment" >
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="800dp"
+        android:layout_height="800dp"
+        android:src="@drawable/a_background_for_kids_wich_have_many_colors_and_maybe_small_comic_dogs_and_cats_and_the_pets_are_in__3566878771"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -23,8 +33,9 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/firstGame"
         android:backgroundTint="@color/red"
+        android:text="@string/firstGame"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -36,6 +47,8 @@
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/orange"
         android:text="@string/numberGame"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,23 +60,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/yellow"
-        android:text="Hunde"
+        android:text="Tiere"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/numberGame" />
-
-    <Button
-        android:id="@+id/cats"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/teal"
-        android:text="@string/katzen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dogs" />
 
     <Button
         android:id="@+id/whereIsTheVegetables2"
@@ -72,10 +75,11 @@
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/navy"
         android:text="@string/vegetableGame"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cats" />
+        app:layout_constraintTop_toBottomOf="@+id/dogs" />
 
     <Button
         android:id="@+id/petsDataBase"
@@ -84,6 +88,8 @@
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/red"
         android:text="@string/meine_lieblingstiere"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +102,31 @@
         android:layout_marginTop="24dp"
         android:backgroundTint="@color/violet"
         android:text="@string/fruitGame"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/whereIsTheVegetables2" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/winning_star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="0"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+        app:layout_constraintEnd_toStartOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
 </androidx.constraintlayout.widget.ConstraintLayout>

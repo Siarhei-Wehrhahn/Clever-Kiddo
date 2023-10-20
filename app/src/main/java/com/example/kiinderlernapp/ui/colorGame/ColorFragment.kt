@@ -28,14 +28,13 @@ class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
         "#0048FF",  // Blau
         "#FF000000",  // Schwarz
         "#FFFFFFFF",  // Weiß
-        "#CFCFCF",  // Licht
         "#7700FF",  // Lila
         "#808080",  // Grau
         "#FF00D4",  // Pink
         "#FFFF00",  // Gelb
         "#FFA500",  // Orange
         "#964B00",  // Braun
-        "#008080",  // Teal
+        "#008080",  // Türkis
         "#00FFFF",  // Cyan
         "#9400D3",  // Violett
         "#FF00FF",  // Magenta
@@ -46,8 +45,8 @@ class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
     )
 
     private val descriptions = listOf(
-        "Rot", "Grün", "Blau", "Schwarz", "Weiß", "Licht", "Purple", "Grau",
-        "Pink", "Gelb", "Orange", "Braun", "Teal", "Cyan", "Violett", "Magenta",
+        "Rot", "Grün", "Blau", "Schwarz", "Weiß", "Lila", "Grau",
+        "Pink", "Gelb", "Orange", "Braun", "Türkis", "Cyan", "Violett", "Magenta",
         "Gold", "Silber", "Maroon", "Navy"
     )
 
@@ -91,7 +90,6 @@ class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 textToSpeech.setLanguage(Locale.US)
             }
-
         }
     }
 }
