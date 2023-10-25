@@ -1,4 +1,4 @@
-package com.example.kiinderlernapp.ui
+package com.example.kiinderlernapp.ui.favoriteAnimals
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.kiinderlernapp.adapter.FavoritePetAdapter
 import com.example.kiinderlernapp.databinding.FragmentFavoritePetsBinding
+import com.example.kiinderlernapp.ui.MainViewModel
 
 class FavoritePetsFragment : Fragment() {
 

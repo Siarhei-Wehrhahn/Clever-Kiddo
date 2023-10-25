@@ -1,8 +1,10 @@
 package com.example.kiinderlernapp.adapter
 
+import android.text.Layout.Directions
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
@@ -15,7 +17,7 @@ import com.example.kiinderlernapp.ui.MainViewModel
 
 class FavoritePetAdapter(
     private var dataset: List<Animal>,
-    private val viewModel: MainViewModel
+    private val viewModel: MainViewModel,
 ) : RecyclerView.Adapter<FavoritePetAdapter.ItemViewHolder>() {
 
     inner class ItemViewHolder(val binding: ListItemFavoritepetsBinding) :
@@ -37,7 +39,8 @@ class FavoritePetAdapter(
             transformations(RoundedCornersTransformation(10f))
         }
 
-        // TODO Die fun klappt nicht so ganz
+        // TODO Vergrösserung einstellen
+
         holder.binding.imageDelete.setOnClickListener {
             viewModel.deleteById(animal.id)
             notifyDataSetChanged()

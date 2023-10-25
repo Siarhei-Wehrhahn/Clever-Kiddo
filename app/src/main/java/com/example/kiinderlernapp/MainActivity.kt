@@ -8,9 +8,6 @@ import com.example.kiinderlernapp.ui.MainViewModel
 
 class MainActivity : AppCompatActivity(){
 
-    private val viewModel: MainViewModel by viewModels()
-    private lateinit var textToSpeech: TextToSpeech
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

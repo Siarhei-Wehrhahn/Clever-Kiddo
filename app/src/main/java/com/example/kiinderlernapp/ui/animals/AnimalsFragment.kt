@@ -16,14 +16,19 @@ import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.adapter.AnimalAdapter
 import com.example.kiinderlernapp.databinding.FragmentAnimalsBinding
 import com.example.kiinderlernapp.ui.MainViewModel
+import java.util.Locale
 
-class AnimalsFragment : Fragment() {
+class AnimalsFragment : Fragment(),TextToSpeech.OnInitListener {
 
     private lateinit var binding: FragmentAnimalsBinding
     private val viewModel: MainViewModel by viewModels()
     private lateinit var textToSpeech: TextToSpeech
-    private var soundPool: SoundPool? = null
-    private var soundId: Int = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        textToSpeech = TextToSpeech(requireContext(),this)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,23 +43,12 @@ class AnimalsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadDataAnimals()
 
-        val audioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_GAME)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .build()
+        viewModel.textToSpeach.observe(viewLifecycleOwner) {
+            textToSpeech.setPitch(listOf(0.8f,0.9f,1f,1.1f,1.2f).random())
+            textToSpeech.setSpeechRate(listOf(0.8f,0.9f,1f,1.1f,1.2f).random())
+            textToSpeech.speak(it, TextToSpeech.QUEUE_FLUSH, null, null)
 
-        soundPool = SoundPool.Builder()
-            .setMaxStreams(1) // Maximale Anzahl der gleichzeitigen Soundeffekte
-            .setAudioAttributes(audioAttributes)
-            .build()
-
-        // Laden der Sounddatei in den SoundPool
-        soundId = soundPool?.load(requireContext(), R.raw.success, 1) ?: 0
-
-        view.setOnClickListener {
-            playSoundEffect()
         }
-
 
         viewModel.animals.observe(viewLifecycleOwner) {
             binding.recyclerView.adapter =
@@ -65,15 +59,12 @@ class AnimalsFragment : Fragment() {
         pagerSnapHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-    fun playSoundEffect() {
-        soundPool?.play(soundId, 1.0f, 1.0f, 1, 0, 1.0f)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Freigeben des SoundPool
-        soundPool?.release()
-        soundPool = null
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = textToSpeech.setLanguage(Locale.GERMAN)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                textToSpeech.setLanguage(Locale.US)
+            }
+        }
     }
 }

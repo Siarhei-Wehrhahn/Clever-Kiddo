@@ -1,8 +1,14 @@
 package com.example.kiinderlernapp.adapter
 
+import android.media.AudioAttributes
 import android.media.SoundPool
+import android.os.Handler
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -11,6 +17,7 @@ import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.data.datamodels.Animal
 import com.example.kiinderlernapp.databinding.ListItemAnimalBinding
 import com.example.kiinderlernapp.ui.MainViewModel
+import kotlinx.coroutines.delay
 
 class AnimalAdapter(
     private var dataset: List<Animal>,
@@ -31,6 +38,14 @@ class AnimalAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         var animal = dataset[position]
+/*
+        val audioAttributes = AudioAttributes.Builder(requireContext())
+            .setUsage(AudioAttributes.USAGE_GAME)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+            .build()
+
+ */
 
         holder.binding.imageDog.load(animal.imageRecource) {
             error(R.drawable.false_2061131_1280)
@@ -38,7 +53,7 @@ class AnimalAdapter(
         }
 
         holder.binding.imageCatButton.setOnClickListener {
-            if (animal.imageRecource.toString().contains("cat")) {
+            if (animal.imageRecource.contains("cat")) {
                 navController.navigate(R.id.action_animalFragment_to_winningFragment)
 
             } else {
@@ -47,7 +62,7 @@ class AnimalAdapter(
         }
 
         holder.binding.imageDogButton.setOnClickListener {
-            if (animal.imageRecource.toString().contains("dog")) {
+            if (animal.imageRecource.contains("dog")) {
                 navController.navigate(R.id.action_animalFragment_to_winningFragment)
             } else {
                 viewModel.textToSpeach("Das ist leider falsch")
@@ -57,7 +72,19 @@ class AnimalAdapter(
         holder.binding.buttonDownload.setOnClickListener {
             viewModel.insert(animal)
         }
-
-
     }
+/*
+    private fun showErrorMessage() {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Fehler")
+        alertDialogBuilder.setMessage("Das ist leider falsch")
+        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+ */
 }

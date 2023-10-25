@@ -39,10 +39,11 @@ class AppRepository(
     suspend fun getAnimals() {
         try {
             var list = mutableListOf<Animal>()
-            val urls = catApi.retrofitService.getCats()
+            val catUrls = catApi.retrofitService.getCats()
+            val dogUrls = dogApi.retrofitService.getDogs()
             repeat(1) {
-                list.add(Animal(0,dogApi.retrofitService.getDogs().message))
-                list.add(Animal(0,urls[it].url))
+                list.add(Animal(0,dogUrls.message))
+                list.add(Animal(0,catUrls[it].url))
             }
             _animals.postValue(list.toList())
         } catch (e: Exception) {

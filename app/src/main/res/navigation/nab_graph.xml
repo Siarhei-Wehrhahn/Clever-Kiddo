@@ -55,12 +55,15 @@
     </fragment>
     <fragment
         android:id="@+id/favoritePetsFragment"
-        android:name="com.example.kiinderlernapp.ui.FavoritePetsFragment"
+        android:name="com.example.kiinderlernapp.ui.favoriteAnimals.FavoritePetsFragment"
         android:label="fragment_favorite_pets"
         tools:layout="@layout/fragment_favorite_pets" >
         <action
             android:id="@+id/action_favoritePetsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_favoritePetsFragment_to_bigPicFragment"
+            app:destination="@id/bigPicFragment" />
     </fragment>
     <fragment
         android:id="@+id/numberFragment"
@@ -85,5 +88,17 @@
         <action
             android:id="@+id/action_winningFragment_to_dogsFragment"
             app:destination="@id/animalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bigPicFragment"
+        android:name="com.example.kiinderlernapp.ui.favoriteAnimals.BigPicFragment"
+        android:label="fragment_big_pic"
+        tools:layout="@layout/fragment_big_pic" >
+        <action
+            android:id="@+id/action_bigPicFragment_to_favoritePetsFragment"
+            app:destination="@id/favoritePetsFragment" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
 </navigation>
