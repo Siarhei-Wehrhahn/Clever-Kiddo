@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,7 +26,7 @@ import java.util.Locale
 class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
 
     private lateinit var binding: FragmentNumberBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels()
     private var randomAnswereList = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).shuffled()
     private lateinit var textToSpeech: TextToSpeech
 

@@ -8,5 +8,6 @@ data class Animal(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val imageRecource: String
+    val imageRecource: String,
+    var isDog: Boolean
 )

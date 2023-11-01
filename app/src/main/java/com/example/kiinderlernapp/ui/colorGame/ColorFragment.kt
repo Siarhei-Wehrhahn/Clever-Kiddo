@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -20,7 +21,7 @@ import java.util.Locale
 class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
 
     private lateinit var binding: FragmentColorBinding
-    private val viewmodel: MainViewModel by viewModels()
+    private val viewmodel: MainViewModel by activityViewModels()
     private lateinit var textToSpeech: TextToSpeech
     private val colors = listOf(
         "#FF1100",  // Rot

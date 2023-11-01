@@ -3,7 +3,9 @@ package com.example.kiinderlernapp.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.data.datamodels.Animal
+import com.example.kiinderlernapp.data.datamodels.Quiz
 import com.example.kiinderlernapp.data.localdata.DataBase
 import com.example.kiinderlernapp.data.remoute.CatApi
 import com.example.kiinderlernapp.data.remoute.DogApi
@@ -42,8 +44,8 @@ class AppRepository(
             val catUrls = catApi.retrofitService.getCats()
             val dogUrls = dogApi.retrofitService.getDogs()
             repeat(1) {
-                list.add(Animal(0,dogUrls.message))
-                list.add(Animal(0,catUrls[it].url))
+                list.add(Animal(0,dogUrls.message,true))
+                list.add(Animal(0,catUrls[it].url,false))
             }
             _animals.postValue(list.toList())
         } catch (e: Exception) {

@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_homeFragment_to_numberFragment"
             app:destination="@id/numberFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_vegetableFragment"
+            app:destination="@id/vegetableFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -61,9 +64,6 @@
         <action
             android:id="@+id/action_favoritePetsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_favoritePetsFragment_to_bigPicFragment"
-            app:destination="@id/bigPicFragment" />
     </fragment>
     <fragment
         android:id="@+id/numberFragment"
@@ -88,17 +88,20 @@
         <action
             android:id="@+id/action_winningFragment_to_dogsFragment"
             app:destination="@id/animalFragment" />
+        <action
+            android:id="@+id/action_winningFragment_to_vegetableFragment"
+            app:destination="@id/vegetableFragment" />
     </fragment>
     <fragment
-        android:id="@+id/bigPicFragment"
-        android:name="com.example.kiinderlernapp.ui.favoriteAnimals.BigPicFragment"
-        android:label="fragment_big_pic"
-        tools:layout="@layout/fragment_big_pic" >
+        android:id="@+id/vegetableFragment"
+        android:name="com.example.kiinderlernapp.ui.vegetable.VegetableFragment"
+        android:label="fragment_vegetable"
+        tools:layout="@layout/fragment_vegetable" >
         <action
-            android:id="@+id/action_bigPicFragment_to_favoritePetsFragment"
-            app:destination="@id/favoritePetsFragment" />
-        <argument
-            android:name="position"
-            app:argType="integer" />
+            android:id="@+id/action_vegetableFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_vegetableFragment_to_winningFragment"
+            app:destination="@id/winningFragment" />
     </fragment>
 </navigation>

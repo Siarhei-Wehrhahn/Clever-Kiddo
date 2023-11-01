@@ -38,14 +38,6 @@ class AnimalAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         var animal = dataset[position]
-/*
-        val audioAttributes = AudioAttributes.Builder(requireContext())
-            .setUsage(AudioAttributes.USAGE_GAME)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
-            .build()
-
- */
 
         holder.binding.imageDog.load(animal.imageRecource) {
             error(R.drawable.false_2061131_1280)
@@ -53,7 +45,7 @@ class AnimalAdapter(
         }
 
         holder.binding.imageCatButton.setOnClickListener {
-            if (animal.imageRecource.contains("cat")) {
+            if (!animal.isDog) {
                 navController.navigate(R.id.action_animalFragment_to_winningFragment)
 
             } else {
@@ -62,7 +54,7 @@ class AnimalAdapter(
         }
 
         holder.binding.imageDogButton.setOnClickListener {
-            if (animal.imageRecource.contains("dog")) {
+            if (animal.isDog) {
                 navController.navigate(R.id.action_animalFragment_to_winningFragment)
             } else {
                 viewModel.textToSpeach("Das ist leider falsch")
@@ -73,18 +65,4 @@ class AnimalAdapter(
             viewModel.insert(animal)
         }
     }
-/*
-    private fun showErrorMessage() {
-        val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("Fehler")
-        alertDialogBuilder.setMessage("Das ist leider falsch")
-        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
-    }
-
- */
 }

@@ -1,21 +1,24 @@
 package com.example.kiinderlernapp.ui.numberGame
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.kiinderlernapp.R
-import com.example.kiinderlernapp.data.score
 import com.example.kiinderlernapp.databinding.FragmentWinningBinding
+import com.example.kiinderlernapp.ui.MainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class WinningFragment : Fragment() {
 
     private lateinit var binding: FragmentWinningBinding
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +31,11 @@ class WinningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        score += 2
+        viewModel.winStars()
+        val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("score", viewModel.score)
+        editor.apply()
 
         lifecycleScope.launch {
             delay(3000)

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.kiinderlernapp.adapter.FavoritePetAdapter
 import com.example.kiinderlernapp.databinding.FragmentFavoritePetsBinding
@@ -13,7 +14,7 @@ import com.example.kiinderlernapp.ui.MainViewModel
 class FavoritePetsFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoritePetsBinding
-    private val viewmodel: MainViewModel by viewModels()
+    private val viewmodel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
