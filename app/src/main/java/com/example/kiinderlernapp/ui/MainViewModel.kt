@@ -29,29 +29,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var index = 0
 
-    private var _quiz = MutableLiveData(Questions.questions[index])
-    val quiz: LiveData<Quiz>
-        get() = _quiz
-
-    fun checkAnswere(answere: Int): Boolean {
-        var rightAnswere = answere == _quiz.value?.rightAnswere
-        if (!rightAnswere && index != 0) {
-            _quiz.value = Questions.questions[index-1]
-        }
-        if (rightAnswere && index == Questions.questions.size -1) {
-            rightAnswere = false
-        }
-        if (index == 0 && !rightAnswere) {
-            _quiz.value = Quiz("", R.drawable.kiwi,R.drawable.gurcke,R.drawable.kopfsalat,R.drawable.weintrauben,0)
-        }
-        return rightAnswere
-    }
-
-    fun nextQuestion() {
-        index++
-        _quiz.value = Questions.questions[index]
-    }
-
     private val repo = AppRepository(DogApi, CatApi, DataBase.getDatabase(application))
 
     val database = DataBase.getDatabase(application)
@@ -89,5 +66,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.deleteById(id)
         }
+    }
+
+    private var _quiz = MutableLiveData(Questions.questions[index])
+    val quiz: LiveData<Quiz>
+        get() = _quiz
+
+    fun checkAnswere(answere: Int): Boolean {
+        var rightAnswere = answere == _quiz.value?.rightAnswere
+        if (rightAnswere && index < Questions.questions.size -1) {
+            rightAnswere = true
+        }
+        if (rightAnswere && index == Questions.questions.size -1) {
+            _quiz.value = Questions.questions[0]
+        }
+        if (!rightAnswere) {
+            rightAnswere = false
+        }
+        return rightAnswere
+    }
+
+    fun nextQuestion() {
+        index++
+        _quiz.value = Questions.questions[index]
     }
 }
