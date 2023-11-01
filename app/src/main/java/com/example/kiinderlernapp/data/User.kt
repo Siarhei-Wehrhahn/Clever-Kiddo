@@ -12,7 +12,7 @@ object Questions {
         }
 
     private fun loadQuestions(): List<Quiz> {
-        var pics = listOf(
+        var pics = mutableListOf(
             R.drawable.apfel,
             R.drawable.blumenkohl,
             R.drawable.broccoli,
@@ -28,142 +28,151 @@ object Questions {
             R.drawable.tomate,
             R.drawable.weintrauben,
             R.drawable.zwiebel
-        ).random()
-        return listOf(
-            Quiz(
-                question = "Tippe auf den Brokkoli!",
-                R.drawable.broccoli,
-                pics,
-                pics,
-                pics,
-                R.drawable.broccoli
-            ),
-
-            Quiz(
-                question = "Wähle die Erdbeere aus!",
-                pics,
-                R.drawable.erdbeere,
-                pics,
-                pics,
-                R.drawable.erdbeere
-            ),
-
-            Quiz(
-                question = "Tippe auf den Rosenkohl!",
-                R.drawable.rosenkohl,
-                pics,
-                pics,
-                pics,
-                R.drawable.rosenkohl
-            ),
-
-            Quiz(
-                question = "Berühre die Tomate!",
-                pics,
-                pics,
-                pics,
-                R.drawable.tomate,
-                R.drawable.tomate
-            ),
-
-            Quiz(
-                question = "Wähle die Radieschen aus!",
-                pics,
-                pics,
-                R.drawable.radieschen,
-                pics,
-                R.drawable.radieschen
-            ),
-
-            Quiz(
-                question = "Berühre die Erbsen!",
-                pics,
-                R.drawable.erbsen,
-                pics,
-                pics,
-                R.drawable.erbsen
-            ),
-
-            Quiz(
-                question = "Klicke auf den Granatapfel!",
-                pics,
-                pics,
-                R.drawable.granatapfel,
-                pics,
-                R.drawable.granatapfel
-            ),
-
-            Quiz(
-                question = "Tippe auf den Apfel!",
-                R.drawable.apfel,
-                pics,
-                pics,
-                pics,
-                R.drawable.apfel
-            ),
-
-            Quiz(
-                question = "Drücke auf den Mais!",
-                pics,
-                pics,
-                pics,
-                R.drawable.mais,
-                R.drawable.mais
-            ),
-
-            Quiz(
-                question = "Klicke auf die Zwiebeln!",
-                pics,
-                pics,
-                R.drawable.zwiebel,
-                pics,
-                R.drawable.zwiebel
-            ),
-
-            Quiz(
-                question = "Berühre die Weintrauben!",
-                R.drawable.weintrauben,
-                pics,
-                pics,
-                pics,
-                R.drawable.weintrauben
-            ),
-
-            Quiz(
-                question = "Wähle die Gurke!",
-                pics,
-                pics,
-                R.drawable.gurcke,
-                pics,
-                R.drawable.gurcke
-            ),
-
-            Quiz(
-                question = "Drücke auf den Kopfsalat!",
-                pics,
-                pics,
-                pics,
-                R.drawable.kopfsalat,
-                R.drawable.kopfsalat
-            ),
-
-            Quiz(
-                question = "Tippe auf die Blumenkohl!",
-                R.drawable.blumenkohl,
-                pics,
-                pics,
-                pics,
-                R.drawable.blumenkohl
-            ),
-
-            Quiz(
-                question = "Wähle die Kiwi!",
-                pics,
-                pics,
-                R.drawable.kiwi,
-                pics,
-                R.drawable.kiwi
-            )
         )
+        return pics.map { rightAnswere ->
+            // Erstelle eine Kopie der pics-Liste ohne das richtige Antwortbild
+            val options = pics.toMutableList()
+            options.remove(rightAnswere)
+
+            // Mische die options-Liste zufällig
+            options.shuffle()
+
+            return listOf(
+                Quiz(
+                    question = "Tippe auf den Brokkoli!",
+                    R.drawable.broccoli,
+                    options[0],
+                    options[1],
+                    options[2],
+                    1
+                ),
+
+                Quiz(
+                    question = "Wähle die Erdbeere aus!",
+                    options[3],
+                    R.drawable.erdbeere,
+                    options[4],
+                    options[5],
+                    2
+                ),
+
+                Quiz(
+                    question = "Tippe auf den Rosenkohl!",
+                    R.drawable.rosenkohl,
+                    options[6],
+                    options[7],
+                    options[8],
+                    1
+                ),
+
+                Quiz(
+                    question = "Berühre die Tomate!",
+                    options[9],
+                    options[10],
+                    options[11],
+                    R.drawable.tomate,
+                    4
+                ),
+
+                Quiz(
+                    question = "Wähle die Radieschen aus!",
+                    options[12],
+                    options[13],
+                    R.drawable.radieschen,
+                    options[1],
+                    3
+                ),
+
+                Quiz(
+                    question = "Berühre die Erbsen!",
+                    options[0],
+                    R.drawable.erbsen,
+                    options[1],
+                    options[3],
+                    2
+                ),
+
+                Quiz(
+                    question = "Klicke auf den Granatapfel!",
+                    options[0],
+                    options[3],
+                    R.drawable.granatapfel,
+                    options[2],
+                    3
+                ),
+
+                Quiz(
+                    question = "Tippe auf den Apfel!",
+                    R.drawable.apfel,
+                    options[5],
+                    options[6],
+                    options[7],
+                    1
+                ),
+
+                Quiz(
+                    question = "Drücke auf den Mais!",
+                    options[1],
+                    options[2],
+                    options[3],
+                    R.drawable.mais,
+                    4
+                ),
+
+                Quiz(
+                    question = "Klicke auf die Zwiebeln!",
+                    options[0],
+                    options[1],
+                    R.drawable.zwiebel,
+                    options[3],
+                    3
+                ),
+
+                Quiz(
+                    question = "Berühre die Weintrauben!",
+                    R.drawable.weintrauben,
+                    options[1],
+                    options[2],
+                    options[3],
+                    1
+                ),
+
+                Quiz(
+                    question = "Wähle die Gurke!",
+                    options[1],
+                    options[2],
+                    R.drawable.gurcke,
+                    options[3],
+                    3
+                ),
+
+                Quiz(
+                    question = "Drücke auf den Kopfsalat!",
+                    options[6],
+                    options[7],
+                    options[8],
+                    R.drawable.kopfsalat,
+                    4
+                ),
+
+                Quiz(
+                    question = "Tippe auf die Blumenkohl!",
+                    R.drawable.blumenkohl,
+                    options[3],
+                    options[2],
+                    options[4],
+                    1
+                ),
+
+                Quiz(
+                    question = "Wähle die Kiwi!",
+                    options[8],
+                    options[9],
+                    R.drawable.kiwi,
+                    options[1],
+                    3
+                )
+            )
+        }
     }
 }

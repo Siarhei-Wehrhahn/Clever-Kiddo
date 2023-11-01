@@ -77,9 +77,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (rightAnswere && index < Questions.questions.size -1) {
             rightAnswere = true
         }
-        if (rightAnswere && index == Questions.questions.size -1) {
-            _quiz.value = Questions.questions[0]
-        }
         if (!rightAnswere) {
             rightAnswere = false
         }
@@ -87,7 +84,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun nextQuestion() {
-        index++
-        _quiz.value = Questions.questions[index]
+        if (index < Questions.questions.size -1) {
+            index++
+            _quiz.value = Questions.questions[index]
+        } else {
+            index = 0
+        }
     }
 }
