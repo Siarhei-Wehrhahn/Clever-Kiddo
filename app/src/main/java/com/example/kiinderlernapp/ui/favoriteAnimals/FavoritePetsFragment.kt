@@ -27,12 +27,11 @@ class FavoritePetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // ViewModel-Methode "getDatabase" aufrufen, um die Daten aus der lokalen Datenbank abzurufen
         viewmodel.getDatabase()
 
-        // TODO eine großere ansicht erstellen von den bildern
-
-
-
+        // RecyclerView-Adapter "FavoritePetAdapter" mit den abgerufenen Daten setzen
         viewmodel.dataset.observe(viewLifecycleOwner) {
             binding.recyclerViewFavo.adapter = FavoritePetAdapter(it, viewmodel)
         }

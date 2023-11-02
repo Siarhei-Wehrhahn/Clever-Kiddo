@@ -5,9 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity("animal_database")
 data class Animal(
-
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val imageRecource: String,
-    var isDog: Boolean
+    @PrimaryKey(autoGenerate = true) // Primärschlüssel, automatische Generierung
+    val id: Int, // Eindeutige Identifikation des Tiers
+    val imageRecource: String, // Ressourcen-URL oder Pfad zum Tierbild
+    var isDog: Boolean // Ein Boolean, der angibt, ob das Tier ein Hund ist (true) oder nicht (false)
 )

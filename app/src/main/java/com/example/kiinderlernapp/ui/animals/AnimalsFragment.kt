@@ -35,13 +35,17 @@ class AnimalsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Laden von Tierdaten
         viewModel.loadDataAnimals()
 
+        // Beobachten von Tierdatenänderungen und Aktualisieren des RecyclerView-Adapters
         viewModel.animals.observe(viewLifecycleOwner) {
             binding.recyclerView.adapter =
                 AnimalAdapter(it.shuffled(), viewModel, findNavController())
         }
 
+        // Initialisieren eines PagerSnapHelpers für das RecyclerView
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(binding.recyclerView)
     }

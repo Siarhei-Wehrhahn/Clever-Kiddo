@@ -11,6 +11,7 @@ object Questions {
             return loadQuestions()
         }
 
+    // Funktion zum Laden von Fragen und Bildern für das Quiz
     private fun loadQuestions(): List<Quiz> {
         var pics = mutableListOf(
             R.drawable.apfel,

@@ -34,7 +34,6 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         textToSpeech = TextToSpeech(requireContext(), this)
-
     }
 
     override fun onCreateView(
@@ -50,23 +49,26 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
         super.onViewCreated(view, savedInstanceState)
         var mMediaPlayer: MediaPlayer? = null
 
-        // delay muss gemacht werden weil die textToSpeech Engine länger zum laden braucht als der observer
+        // Verzögerung, um sicherzustellen, dass die Text-to-Speech-Engine geladen ist
         lifecycleScope.launch {
             delay(500)
             viewModel.textToSpeach.observe(viewLifecycleOwner) {
+                // Zufällige Tonhöhe und Sprachrate einstellen
                 textToSpeech.setPitch(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
                 textToSpeech.setSpeechRate(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
                 textToSpeech.speak(it, TextToSpeech.QUEUE_FLUSH, null, null)
             }
         }
 
+        // Zufällige Nummer auswählen
         var randomNumber = (1..10).random()
 
+        // Text-to-Speech-Ansage für die ausgewählte Nummer
         viewModel.textToSpeach("Drücke auf die $randomNumber")
+        binding.textQuestion.text = "Drücke auf die $randomNumber"
 
-        binding.textQuestion.setText("Drücke auf die $randomNumber")
-
-        var answereButtons = listOf(
+        // Eine Liste von Antwortbuttons erstellen
+        var answerButtons = listOf(
             binding.text1,
             binding.text2,
             binding.text3,
@@ -78,10 +80,12 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
             binding.text9,
             binding.text10
         )
+
+        // Antwortbuttons mit zufälligen Nummern füllen
         randomAnswereList = randomAnswereList.shuffled()
-        repeat(answereButtons.size - 1) {
-            answereButtons[it].text = randomAnswereList[it].toString()
-            answereButtons[it].typeface = Typeface.create(
+        repeat(answerButtons.size - 1) {
+            answerButtons[it].text = randomAnswereList[it].toString()
+            answerButtons[it].typeface = Typeface.create(
                 ResourcesCompat.getFont(
                     requireContext(),
                     listOf(
@@ -97,12 +101,12 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
             )
         }
 
-        answereButtons.forEachIndexed { index, button ->
+        // Antwortbuttons konfigurieren
+        answerButtons.forEachIndexed { index, button ->
             button.text = randomAnswereList[index].toString()
             button.setOnClickListener {
                 if (button.text.toString().toInt() == randomNumber) {
-                    // sound das die antwort richtig ist
-                    // Ich musste den mediaplayer nochmal null setzen weil er sonst den falschen sound abspielt
+                    // Sound abspielen, wenn die Antwort richtig ist
                     if (mMediaPlayer == null) {
                         mMediaPlayer = MediaPlayer.create(context, R.raw.success)
                         mMediaPlayer!!.isLooping = false
@@ -115,7 +119,7 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
                     }
                     findNavController().navigate(R.id.action_numberFragment_to_winningFragment)
                 } else {
-                    // sound das die antwort falsch ist
+                    // Sound abspielen, wenn die Antwort falsch ist, und den Button ausblenden
                     if (mMediaPlayer == null) {
                         mMediaPlayer = MediaPlayer.create(context, R.raw.wrong)
                         mMediaPlayer!!.isLooping = false
@@ -130,7 +134,8 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
                 }
             }
         }
-        // TODO Vielleicht einen shop einbringen bei dem man mit ingamegeld einkaufen kann welches man durch erfolge gewinnt
+
+        // TODO: Möglicherweise einen Shop implementieren, um mit Ingame-Währung einzukaufen, die durch Erfolge gewonnen wird
     }
 
     override fun onInit(status: Int) {
@@ -144,7 +149,7 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Beenden Sie das Text-to-Speech, wenn das Fragment zerstört wird
-        viewModel.textToSpeach
+        // Text-to-Speech beenden, wenn das Fragment zerstört wird
+        textToSpeech.shutdown()
     }
 }

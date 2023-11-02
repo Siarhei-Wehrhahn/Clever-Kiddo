@@ -1,7 +1,6 @@
 package com.example.kiinderlernapp.ui
 
 import android.os.Bundle
-import android.text.Layout.Directions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,14 +21,19 @@ class StartFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentStartBinding.inflate(inflater,container,false)
+        // Verknüpfen Sie das Fragment mit dem zugehörigen Layout
+        binding = FragmentStartBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Verwenden von Kotlin Coroutines, um eine Verzögerung von 3 Sekunden zu erzeugen
         lifecycleScope.launch {
             delay(3000)
+
+            // Navigieren zur HomeFragment-Ansicht nach der Verzögerung
             findNavController().navigate(R.id.action_startFragment_to_homeFragment)
         }
     }

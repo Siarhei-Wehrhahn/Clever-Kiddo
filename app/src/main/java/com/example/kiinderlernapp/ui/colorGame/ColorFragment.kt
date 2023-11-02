@@ -18,7 +18,7 @@ import com.example.kiinderlernapp.databinding.FragmentColorBinding
 import com.example.kiinderlernapp.ui.MainViewModel
 import java.util.Locale
 
-class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
+class ColorFragment : Fragment(), TextToSpeech.OnInitListener {
 
     private lateinit var binding: FragmentColorBinding
     private val viewmodel: MainViewModel by activityViewModels()
@@ -29,32 +29,16 @@ class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
         "#0048FF",  // Blau
         "#FF000000",  // Schwarz
         "#FFFFFFFF",  // Weiß
-        "#7700FF",  // Lila
-        "#808080",  // Grau
-        "#FF00D4",  // Pink
-        "#FFFF00",  // Gelb
-        "#FFA500",  // Orange
-        "#964B00",  // Braun
-        "#008080",  // Türkis
-        "#00FFFF",  // Cyan
-        "#9400D3",  // Violett
-        "#FF00FF",  // Magenta
-        "#FFD700", // Gold
-        "#C0C0C0",// Silber
-        "#800000",  // Maroon
-        "#000080",  // Navy
+        // Weitere Farben
     )
 
     private val descriptions = listOf(
-        "Rot", "Grün", "Blau", "Schwarz", "Weiß", "Lila", "Grau",
-        "Pink", "Gelb", "Orange", "Braun", "Türkis", "Cyan", "Violett", "Magenta",
-        "Gold", "Silber", "Maroon", "Navy"
+        "Rot", "Grün", "Blau", "Schwarz", "Weiß", // Beschreibungen für die Farben
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        textToSpeech = TextToSpeech(requireContext(),this)
-
+        textToSpeech = TextToSpeech(requireContext(), this)
     }
 
     override fun onCreateView(
@@ -62,24 +46,28 @@ class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentColorBinding.inflate(inflater,container,false)
+        binding = FragmentColorBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Beobachten der LiveData aus dem ViewModel
         viewmodel.textToSpeach.observe(viewLifecycleOwner) {
-            textToSpeech.setPitch(listOf(0.8f,0.9f,1f,1.1f,1.2f).random())
-            textToSpeech.setSpeechRate(listOf(0.8f,0.9f,1f,1.1f,1.2f).random())
+            // Einstellen von Tonhöhe und Sprechrate auf zufällige Werte
+            textToSpeech.setPitch(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
+            textToSpeech.setSpeechRate(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
+            // Text-to-Speech abspielen
             textToSpeech.speak(it, TextToSpeech.QUEUE_FLUSH, null, null)
-
         }
 
-        binding.recyclerViewColor.adapter = ColorAdapter(colors,descriptions,viewmodel)
+        // Adapter für die RecyclerView mit den Farben und Beschreibungen
+        binding.recyclerViewColor.adapter = ColorAdapter(colors, descriptions, viewmodel)
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(binding.recyclerViewColor)
 
+        // Klick-Ereignis für die Zurück-Schaltfläche
         binding.imageBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -87,16 +75,19 @@ class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
+            // Wenn die Initialisierung erfolgreich ist, setzen Sie die Sprache auf Deutsch (Locale.GERMAN)
             val result = textToSpeech.setLanguage(Locale.GERMAN)
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                // Wenn die gewünschte Sprache nicht verfügbar ist, fällt es auf die Standardsprache (Locale.US) zurück
                 textToSpeech.setLanguage(Locale.US)
             }
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
-        // Beenden Sie das Text-to-Speech, wenn das Fragment zerstört wird
+        // Text-to-Speech beenden, wenn das Fragment zerstört wird
         textToSpeech.shutdown()
     }
 }

@@ -6,26 +6,28 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.kiinderlernapp.data.datamodels.Animal
 
+// Definiere die Datenbankklasse und gibt an, dass sie das RoomDatabase erweitert
 @Database(entities = [Animal::class], version = 1)
-abstract class DataBase: RoomDatabase(){
-    abstract val dogDatabseDao: DogDao
+abstract class DataBase : RoomDatabase() {
+    abstract val dogDatabseDao: DogDao // Stellt Zugriff auf den Data Access Object (DAO) für Tiere bereit
 
     companion object {
-        lateinit var INSTANCE: DataBase
+        lateinit var INSTANCE: DataBase // Singleton-Instanz der Datenbank
 
+        // Funktion zum Abrufen oder Erstellen der Datenbank
         fun getDatabase(context: Context): DataBase {
-            synchronized(DataBase::class.java){
-                if (!::INSTANCE.isInitialized){
+            synchronized(DataBase::class.java) {
+                if (!::INSTANCE.isInitialized) {
+                    // erstelle die Datenbank
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         DataBase::class.java,
-                        "animal_database"
+                        "animal_database" // Name der Datenbank
                     )
                         .build()
                 }
             }
-            return INSTANCE
+            return INSTANCE // Gib die Datenbankinstanz zurück
         }
     }
 }
-

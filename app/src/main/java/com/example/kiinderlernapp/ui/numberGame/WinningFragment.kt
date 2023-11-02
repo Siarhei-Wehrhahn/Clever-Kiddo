@@ -25,18 +25,25 @@ class WinningFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentWinningBinding.inflate(inflater,container,false)
+        binding = FragmentWinningBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Das ViewModel aktualisiert die Anzahl der gewonnenen Sterne
         viewModel.winStars()
+
+        // Ein SharedPreferences-Objekt erstellen, um die Punktzahl zu speichern
         val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
+
+        // Die aktuelle Punktzahl im SharedPreferences speichern
         editor.putInt("score", viewModel.score)
         editor.apply()
 
+        // Eine Verzögerung von 3 Sekunden, bevor zur vorherigen Ansicht zurücknavigiert wird
         lifecycleScope.launch {
             delay(3000)
             findNavController().popBackStack()
