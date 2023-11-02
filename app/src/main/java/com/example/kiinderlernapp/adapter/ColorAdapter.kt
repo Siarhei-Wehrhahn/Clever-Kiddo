@@ -27,15 +27,23 @@ class ColorAdapter(
     override fun onBindViewHolder(holder: ItemViewColorHolder, position: Int) {
         var color = colorHexa[position]
         var colorName = colorDescription[position]
+
+        // Setze die Hintergrundfarbe des Elements
         holder.binding.root.setBackgroundColor(Color.parseColor(color))
+
+        // Setze den Text im TextView auf die Farbname
         holder.binding.result.text = colorName
 
+        // Definiere die Aktion, wenn auf das Element geklickt wird
         holder.binding.root.setOnClickListener {
+            // Mache den Text sichtbar
             holder.binding.result.isVisible = true
             val handler = Handler()
-            viewModel.textToSpeach(colorName)
-            handler.postDelayed({holder.binding.result.isVisible = false},3000)
+            viewModel.textToSpeach(colorName) // Sprich den Farbnamen aus
+            handler.postDelayed({ holder.binding.result.isVisible = false }, 3000) // Verstecke den Text nach 3 Sekunden
         }
+
+        // Wenn die Farbe Weiß ist, ändere die Textfarbe auf Schwarz
         if (colorName == "Weiß") {
             holder.binding.result.setTextColor(Color.BLACK)
         }

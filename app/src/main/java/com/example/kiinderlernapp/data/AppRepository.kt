@@ -43,17 +43,15 @@ class AppRepository(
             var list = mutableListOf<Animal>()
             val catUrls = catApi.retrofitService.getCats()
             val dogUrls = dogApi.retrofitService.getDogs()
-            repeat(1) {
-                list.add(Animal(0,dogUrls.message,true))
-                list.add(Animal(0,catUrls[it].url,false))
-            }
-            _animals.postValue(list.toList())
+            list.add(Animal(0, dogUrls.message, true))
+            list.add(Animal(0, catUrls[0].url, false))
+            _animals.postValue(list.toList().shuffled())
         } catch (e: Exception) {
             Log.e("$log", "${e.message}")
         }
     }
 
-    suspend fun InsertAnimals(animal: Animal) {
+    suspend fun insertAnimals(animal: Animal) {
         try {
             database.dogDatabseDao.insertItem(animal)
         } catch (e: Exception) {

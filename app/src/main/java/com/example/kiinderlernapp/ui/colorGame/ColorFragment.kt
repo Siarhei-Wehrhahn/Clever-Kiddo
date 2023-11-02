@@ -93,4 +93,10 @@ class ColorFragment : Fragment(),TextToSpeech.OnInitListener {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Beenden Sie das Text-to-Speech, wenn das Fragment zerstört wird
+        textToSpeech.shutdown()
+    }
 }

@@ -70,4 +70,25 @@
         app:layout_constraintBottom_toTopOf="@+id/imageAnswereD"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ImageView
+        android:id="@+id/imagePlus2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:src="@drawable/baseline_exposure_plus_2_24"
+        app:layout_constraintBottom_toBottomOf="@+id/imageStar"
+        app:layout_constraintEnd_toStartOf="@+id/imageStar"
+        app:layout_constraintTop_toTopOf="@+id/imageStar" />
+
+    <ImageView
+        android:id="@+id/imageStar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/winning_star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textQuestion3" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.kiinderlernapp.ui.numberGame
 
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
@@ -47,6 +48,7 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var mMediaPlayer: MediaPlayer? = null
 
         // delay muss gemacht werden weil die textToSpeech Engine länger zum laden braucht als der observer
         lifecycleScope.launch {
@@ -99,17 +101,35 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
             button.text = randomAnswereList[index].toString()
             button.setOnClickListener {
                 if (button.text.toString().toInt() == randomNumber) {
-                    viewModel.textToSpeach("Richtig")
+                    // sound das die antwort richtig ist
+                    // Ich musste den mediaplayer nochmal null setzen weil er sonst den falschen sound abspielt
+                    if (mMediaPlayer == null) {
+                        mMediaPlayer = MediaPlayer.create(context, R.raw.success)
+                        mMediaPlayer!!.isLooping = false
+                        mMediaPlayer!!.start()
+                    } else {
+                        mMediaPlayer = null
+                        mMediaPlayer = MediaPlayer.create(context, R.raw.success)
+                        mMediaPlayer!!.isLooping = false
+                        mMediaPlayer?.start()
+                    }
                     findNavController().navigate(R.id.action_numberFragment_to_winningFragment)
                 } else {
-                    viewModel.textToSpeach("Leider Falsch")
+                    // sound das die antwort falsch ist
+                    if (mMediaPlayer == null) {
+                        mMediaPlayer = MediaPlayer.create(context, R.raw.wrong)
+                        mMediaPlayer!!.isLooping = false
+                        mMediaPlayer!!.start()
+                    } else {
+                        mMediaPlayer = null
+                        mMediaPlayer = MediaPlayer.create(context, R.raw.wrong)
+                        mMediaPlayer!!.isLooping = false
+                        mMediaPlayer?.start()
+                    }
                     button.isVisible = false
                 }
             }
         }
-
-        // TODO Mehrere antwortmöglichkeiten und bei falscher antwort coole Animation mit sound abspielen lassen
-
         // TODO Vielleicht einen shop einbringen bei dem man mit ingamegeld einkaufen kann welches man durch erfolge gewinnt
     }
 
@@ -120,5 +140,11 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
                 textToSpeech.setLanguage(Locale.US)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Beenden Sie das Text-to-Speech, wenn das Fragment zerstört wird
+        viewModel.textToSpeach
     }
 }

@@ -2,6 +2,7 @@ package com.example.kiinderlernapp.ui
 
 import android.app.Application
 import android.content.Context
+import android.media.MediaPlayer
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -42,7 +43,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insert(animal: Animal) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.InsertAnimals(animal)
+            repo.insertAnimals(animal)
         }
     }
 
@@ -72,13 +73,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val quiz: LiveData<Quiz>
         get() = _quiz
 
-    fun checkAnswere(answere: Int): Boolean {
+    fun checkAnswere(answere: Int,context: Context): Boolean {
+        var mMediaPlayer: MediaPlayer? = null
         var rightAnswere = answere == _quiz.value?.rightAnswere
         if (rightAnswere && index < Questions.questions.size -1) {
             rightAnswere = true
+            // sound das die antwort falsch ist
+            if (mMediaPlayer == null) {
+                mMediaPlayer = MediaPlayer.create(context, R.raw.success)
+                mMediaPlayer!!.isLooping = false
+                mMediaPlayer!!.start()
+            } else mMediaPlayer!!.start()
         }
         if (!rightAnswere) {
             rightAnswere = false
+            // sound das die antwort falsch ist
+            if (mMediaPlayer == null) {
+                mMediaPlayer = MediaPlayer.create(context, R.raw.wrong)
+                mMediaPlayer!!.isLooping = false
+                mMediaPlayer!!.start()
+            } else mMediaPlayer!!.start()
         }
         return rightAnswere
     }
