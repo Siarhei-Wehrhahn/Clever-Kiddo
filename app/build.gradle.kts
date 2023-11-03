@@ -68,4 +68,15 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.5.2")
     kapt ("androidx.room:room-compiler:2.5.2")
     implementation ("androidx.room:room-ktx:2.5.2")
+
+    // Animimationen (gifs)
+    dependencies {
+        implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.22")
+
+    }
+
+    // Glide Bibliothek zum speichern von GIFs
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    kapt("com.github.bumptech.glide:compiler:4.12.0")
+
 }

@@ -86,7 +86,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             // Soundeffekt für richtige Antwort abspielen
             if (mMediaPlayer == null) {
                 mMediaPlayer = MediaPlayer.create(context, R.raw.success)
-                mMediaPlayer!!.isLooping = false
                 mMediaPlayer!!.start()
             } else mMediaPlayer!!.start()
         }
@@ -95,7 +94,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             // Soundeffekt für falsche Antwort abspielen
             if (mMediaPlayer == null) {
                 mMediaPlayer = MediaPlayer.create(context, R.raw.wrong)
-                mMediaPlayer!!.isLooping = false
                 mMediaPlayer!!.start()
             } else mMediaPlayer!!.start()
         }

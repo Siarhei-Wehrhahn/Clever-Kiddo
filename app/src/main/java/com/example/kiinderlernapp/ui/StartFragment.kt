@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.databinding.FragmentStartBinding
 import kotlinx.coroutines.delay
@@ -28,6 +29,11 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Glide.with(this)
+            .load(R.raw.loading)
+            .into(binding.imageGif)
+
 
         // Verwenden von Kotlin Coroutines, um eine Verzögerung von 3 Sekunden zu erzeugen
         lifecycleScope.launch {

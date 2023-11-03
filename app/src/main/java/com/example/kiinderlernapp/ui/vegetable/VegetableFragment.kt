@@ -55,18 +55,6 @@ class VegetableFragment : Fragment(),TextToSpeech.OnInitListener {
         binding.imageAnswereC.setImageResource(viewModel.quiz.value!!.answerC)
         binding.imageAnswereD.setImageResource(viewModel.quiz.value!!.answerD)
 
-        viewModel.textToSpeach(viewModel.quiz.value!!.question)
-
-        lifecycleScope.launch {
-            delay(500)
-            viewModel.textToSpeach.observe(viewLifecycleOwner) {
-                // Zufällige Tonhöhe und Sprachrate einstellen
-                textToSpeech.setPitch(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
-                textToSpeech.setSpeechRate(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
-                textToSpeech.speak(it, TextToSpeech.QUEUE_FLUSH, null, null)
-            }
-        }
-
         // Liste der Antwortbilder erstellen
         val answereList =
             listOf(binding.imageAnswereA, binding.imageAnswereB, binding.imageAnswereC, binding.imageAnswereD)
@@ -87,12 +75,25 @@ class VegetableFragment : Fragment(),TextToSpeech.OnInitListener {
                         binding.imagePlus2.isVisible = false
                         binding.imageStar.isVisible = false
                         viewModel.nextQuestion()
+                        var mMediaPlayer: MediaPlayer? = null
                         answereList.forEach { it.visibility = View.VISIBLE }
                     }
                 } else {
                     // Antwortbild ausblenden, wenn die Antwort falsch ist
                     answerImage.visibility = View.GONE
                 }
+            }
+        }
+
+        viewModel.textToSpeach(viewModel.quiz.value!!.question)
+
+        lifecycleScope.launch {
+            delay(500)
+            viewModel.textToSpeach.observe(viewLifecycleOwner) {
+                // Zufällige Tonhöhe und Sprachrate einstellen
+                textToSpeech.setPitch(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
+                textToSpeech.setSpeechRate(listOf(0.8f, 0.9f, 1f, 1.1f, 1.2f).random())
+                if (!textToSpeech.isSpeaking)textToSpeech.speak(it, TextToSpeech.QUEUE_FLUSH, null, null)
             }
         }
     }
@@ -104,5 +105,11 @@ class VegetableFragment : Fragment(),TextToSpeech.OnInitListener {
                 textToSpeech.setLanguage(Locale.US)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Text-to-Speech beenden, wenn das Fragment zerstört wird
+        textToSpeech.shutdown()
     }
 }
