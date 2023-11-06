@@ -76,5 +76,9 @@ class HomeFragment : Fragment() {
         binding.vegetableFruitQuiz.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_vegetableFragment)
         }
+
+        binding.tamagotchi.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_tamagochiFragment)
+        }
     }
 }
