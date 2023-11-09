@@ -9,6 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.OnConflictStrategy
 import androidx.room.withTransaction
 import com.example.kiinderlernapp.data.datamodels.Tamagotchi
+import com.example.kiinderlernapp.data.localdata.animal.AnimalDataBase
 import kotlinx.coroutines.runBlocking
 
 @Database(entities = [Tamagotchi::class], version = 1)
@@ -16,22 +17,24 @@ abstract class TamagotchiDataBase : RoomDatabase() {
     abstract val tamagotchiDatabaseDao: TamagotchiDao // Stellt Zugriff auf den Data Access Object (DAO) für Tamagotchis bereit
 
     companion object {
-        private var INSTANCE: TamagotchiDataBase? = null
+        lateinit var INSTANCE: TamagotchiDataBase
 
         // Funktion zum Abrufen oder Erstellen der Datenbank
         fun getDatabase(context: Context): TamagotchiDataBase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    TamagotchiDataBase::class.java,
-                    "tamagotchi_stats" // Name der Datenbank
-                )
-                    .addCallback(roomDatabaseCallback(context))
-                    .build()
-                INSTANCE = instance
-                instance
+            synchronized(AnimalDataBase::class.java) {
+                if (!Companion::INSTANCE.isInitialized) {
+                    // erstelle die Datenbank
+                    INSTANCE = Room.databaseBuilder(
+                        context.applicationContext,
+                        TamagotchiDataBase::class.java,
+                        "tamagotchi_stats" // Name der Datenbank
+                    )
+                        .build()
+                }
             }
+            return INSTANCE // Gib die Datenbankinstanz zurück
         }
+    }
 
         private fun roomDatabaseCallback(context: Context): Callback {
             return object : Callback() {
@@ -57,4 +60,3 @@ abstract class TamagotchiDataBase : RoomDatabase() {
             }
         }
     }
-}

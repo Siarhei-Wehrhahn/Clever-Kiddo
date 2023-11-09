@@ -86,13 +86,11 @@ class TamagochiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadDataTamagotchi()
 
-        val joy = viewModel.tamagotchi.value?.joy.toString().toInt()
-        val toilet = viewModel.tamagotchi.value?.toilet.toString().toInt()
-        val eat = viewModel.tamagotchi.value?.eat.toString().toInt()
-        val sleep = viewModel.tamagotchi.value?.sleep.toString().toInt()
-
-        val serviceIntent = Intent(requireContext(), TamagotchiService::class.java)
-        requireContext().startService(serviceIntent)
+        // Ohne null prüfung stürzt die app ab
+        val joy = viewModel.tamagotchi.value?.joy?.toString()?.toIntOrNull() ?: 0
+        val toilet = viewModel.tamagotchi.value?.toilet?.toString()?.toIntOrNull() ?: 0
+        val eat = viewModel.tamagotchi.value?.eat?.toString()?.toIntOrNull() ?: 0
+        val sleep = viewModel.tamagotchi.value?.sleep?.toString()?.toIntOrNull() ?: 0
 
         // Je nach status macht es ein anderes Gesicht
         viewModel.tamagotchi.observe(viewLifecycleOwner) {
@@ -168,6 +166,20 @@ class TamagochiFragment : Fragment() {
         }
 
         binding.buttonToilet.setOnClickListener {
+            binding.imageFotball.isVisible = false
+            binding.imageTennisball.isVisible = false
+            if (binding.feddingScrollV.scaleX == 1f) {
+                val scaleUp = ObjectAnimator.ofFloat(binding.feddingScrollV, "scaleX", 0.01f)
+                val animation = AnimatorSet()
+                animation.duration = 500
+                animation.play(scaleUp)
+                animation.start()
+                lifecycleScope.launch {
+                    delay(500)
+                    binding.feddingScrollV.isVisible = false
+                }
+            }
+
             binding.imageTamagotchi.setImageResource(R.drawable.nerdy_grinnging)
             val window = requireActivity().window
             val params = window.attributes
