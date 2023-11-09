@@ -1,8 +1,6 @@
-package com.example.kiinderlernapp.data.remoute
+package com.example.kiinderlernapp.data.remote
 
-import com.example.kiinderlernapp.data.datamodels.Animal
 import com.example.kiinderlernapp.data.datamodels.cats.Cat
-import com.example.kiinderlernapp.data.datamodels.cats.Cats
 import com.example.kiinderlernapp.data.datamodels.dog.Dogs
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

@@ -3,17 +3,18 @@ package com.example.kiinderlernapp.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.data.datamodels.Animal
-import com.example.kiinderlernapp.data.datamodels.Quiz
-import com.example.kiinderlernapp.data.localdata.DataBase
-import com.example.kiinderlernapp.data.remoute.CatApi
-import com.example.kiinderlernapp.data.remoute.DogApi
+import com.example.kiinderlernapp.data.datamodels.Tamagotchi
+import com.example.kiinderlernapp.data.localdata.animal.AnimalDataBase
+import com.example.kiinderlernapp.data.localdata.tamagotchi.TamagotchiDataBase
+import com.example.kiinderlernapp.data.remote.CatApi
+import com.example.kiinderlernapp.data.remote.DogApi
 
 class AppRepository(
     private val dogApi: DogApi, // Zugriff auf die Dog API
     private val catApi: CatApi, // Zugriff auf die Cat API
-    private val database: DataBase // Zugriff auf die lokale Datenbank
+    private val animalDatabase: AnimalDataBase, // Zugriff auf die lokale Animal Datenbank
+    private val tamagotchiDatabase: TamagotchiDataBase // Zugriff auf die lokale Tamagotchi Datenbank
 ) {
 
     private val log = "AppRepository"
@@ -30,10 +31,38 @@ class AppRepository(
     val dataset: LiveData<List<Animal>>
         get() = _dataset
 
+    private val _tamagotchi = MutableLiveData<Tamagotchi>()
+    val tamagotchi: LiveData<Tamagotchi>
+        get() = _tamagotchi
+
+    suspend fun updateTamagotchiStats(tamagotchi: Tamagotchi) {
+        try {
+            tamagotchiDatabase.tamagotchiDatabaseDao.updateStats(tamagotchi)
+        } catch (e: Exception) {
+            Log.e("&log", "${e.message}")
+        }
+    }
+
+    suspend fun insertTamagotchiStats(tamagotchi: Tamagotchi) {
+        try {
+            tamagotchiDatabase.tamagotchiDatabaseDao.insertStats(tamagotchi)
+        } catch (e: Exception) {
+            Log.e("$log", "${e.message}")
+        }
+    }
+
+    suspend fun getTamagotchiStats() {
+        try {
+            _tamagotchi.postValue(tamagotchiDatabase.tamagotchiDatabaseDao.getTamagotchiValues())
+        } catch (e: Exception) {
+            Log.e("$log", "${e.message}")
+        }
+    }
+
     // Funktion zum Abrufen von Daten aus der lokalen Datenbank
     suspend fun getDatabase() {
         try {
-            _dataset.postValue(database.dogDatabseDao.getAll())
+            _dataset.postValue(animalDatabase.animalDatabseDao.getAll())
         } catch (e: Exception) {
             Log.e("$log", "${e.message}")
         }
@@ -57,7 +86,7 @@ class AppRepository(
     // Funktion zum Einfügen eines Tierobjekts in die lokale Datenbank
     suspend fun insertAnimals(animal: Animal) {
         try {
-            database.dogDatabseDao.insertItem(animal)
+            animalDatabase.animalDatabseDao.insertItem(animal)
         } catch (e: Exception) {
             Log.e("$log", "${e.message}")
         }
@@ -66,7 +95,7 @@ class AppRepository(
     // Funktion zum Löschen eines Tierobjekts anhand seiner ID aus der Datenbank
     fun deleteById(id: Int) {
         try {
-            database.dogDatabseDao.delete(id)
+            animalDatabase.animalDatabseDao.delete(id)
         } catch (e: Exception) {
             Log.e("$log", "${e.message}")
         }

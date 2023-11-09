@@ -14,17 +14,19 @@
         android:src="@drawable/tamagochi_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageHungry"
         android:layout_width="50dp"
         android:layout_height="70dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
         android:src="@drawable/fedding"
         app:layout_constraintBottom_toBottomOf="@+id/imageToilet"
-        app:layout_constraintStart_toEndOf="@+id/imageToilet"
+        app:layout_constraintEnd_toStartOf="@+id/imageSleepIndicator"
         app:layout_constraintTop_toTopOf="@+id/imageToilet" />
 
     <ImageView
@@ -38,20 +40,20 @@
         app:layout_constraintTop_toTopOf="@+id/imageHappines" />
 
     <ImageView
-        android:id="@+id/imageFatigueIndicator"
+        android:id="@+id/imageSleepIndicator"
         android:layout_width="50dp"
         android:layout_height="70dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginEnd="16dp"
         android:src="@drawable/moon"
         app:layout_constraintBottom_toBottomOf="@+id/imageHungry"
-        app:layout_constraintStart_toEndOf="@+id/imageHungry"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageHungry" />
 
     <ImageView
         android:id="@+id/imageHappines"
         android:layout_width="50dp"
         android:layout_height="70dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:src="@drawable/happy_icon_15996"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,8 +73,9 @@
 
     <TextView
         android:id="@+id/textToiletPercent"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="100%"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -96,20 +99,20 @@
         app:layout_constraintTop_toBottomOf="@+id/imageHungry" />
 
     <TextView
-        android:id="@+id/textFatigueIndikaterPercent"
+        android:id="@+id/textSleepPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="100%"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imageFatigueIndicator"
+        app:layout_constraintEnd_toEndOf="@+id/imageSleepIndicator"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageFatigueIndicator"
-        app:layout_constraintTop_toBottomOf="@+id/imageFatigueIndicator" />
+        app:layout_constraintStart_toStartOf="@+id/imageSleepIndicator"
+        app:layout_constraintTop_toBottomOf="@+id/imageSleepIndicator" />
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/imageTamagotchi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
@@ -123,83 +126,82 @@
 
     <HorizontalScrollView
         android:id="@+id/feddingScrollV"
-        android:layout_width="300dp"
+        android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="-20dp"
         android:background="@drawable/shape"
         android:scaleX="0.01"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/foodButton"
-        app:layout_constraintStart_toEndOf="@+id/foodButton"
-        app:layout_constraintTop_toTopOf="@+id/foodButton">
+        app:layout_constraintBottom_toTopOf="@+id/imageTamagotchi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonToilet">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="-20dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="55dp">
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/imageApple"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:src="@drawable/apfel" />
 
             <ImageView
                 android:id="@+id/imageBroccoli"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/broccoli" />
 
             <ImageView
                 android:id="@+id/imagePeas"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/erbsen" />
 
             <ImageView
                 android:id="@+id/imageStrawberry"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/erdbeere" />
 
             <ImageView
                 android:id="@+id/imagePomegrenade"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/granatapfel" />
 
             <ImageView
-                android:id="@+id/imageCumbrum"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:id="@+id/imageCucumber"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/gurcke" />
 
             <ImageView
                 android:id="@+id/imageKiwi"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/kiwi" />
 
             <ImageView
                 android:id="@+id/imageSalat"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/kopfsalat" />
         </LinearLayout>
@@ -208,14 +210,68 @@
     <Button
         android:id="@+id/foodButton"
         android:layout_width="wrap_content"
-        android:layout_height="55dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
         android:backgroundTint="@color/blue"
         android:text="Füttern"
+        app:layout_constraintEnd_toEndOf="@+id/imageHungry"
+        app:layout_constraintStart_toStartOf="@+id/imageHungry"
+        app:layout_constraintTop_toBottomOf="@+id/textHungryPercent" />
+
+    <Button
+        android:id="@+id/buttonToilet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/blue"
+        android:text="Toilette"
+        app:layout_constraintEnd_toEndOf="@+id/imageToilet"
+        app:layout_constraintStart_toStartOf="@+id/imageToilet"
+        app:layout_constraintTop_toBottomOf="@+id/textToiletPercent" />
+
+    <Button
+        android:id="@+id/buttonPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/blue"
+        android:text="Spielen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textHappinesPercent" />
+
+    <Button
+        android:id="@+id/buttonSleep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/blue"
+        android:text="Schlafen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSleepPercent" />
+
+    <ImageView
+        android:id="@+id/imageTennisball"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/tennisball"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonSleep"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSleep"
+        app:layout_constraintTop_toTopOf="@+id/buttonSleep" />
+
+    <ImageView
+        android:id="@+id/imageFotball"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/fussball"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonPlay"
+        app:layout_constraintStart_toEndOf="@+id/buttonPlay"
+        app:layout_constraintTop_toTopOf="@+id/buttonPlay" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

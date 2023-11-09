@@ -1,17 +1,16 @@
-package com.example.kiinderlernapp.data.localdata
+package com.example.kiinderlernapp.data.localdata.animal
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.kiinderlernapp.data.datamodels.Animal
-import com.example.kiinderlernapp.data.datamodels.dog.Dogs
+import com.example.kiinderlernapp.data.datamodels.Tamagotchi
 
 // Definiere das Data Access Object (DAO) für die Tierdatenbank
 @Dao
-interface DogDao {
+interface AnimalDao {
 
     // Füge ein Tier zur Datenbank hinzu oder aktualisiere es, wenn es bereits existiert
     @Insert(onConflict = OnConflictStrategy.REPLACE)

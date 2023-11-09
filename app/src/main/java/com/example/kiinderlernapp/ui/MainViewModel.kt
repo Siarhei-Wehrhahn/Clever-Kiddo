@@ -12,9 +12,11 @@ import com.example.kiinderlernapp.data.AppRepository
 import com.example.kiinderlernapp.data.Questions
 import com.example.kiinderlernapp.data.datamodels.Animal
 import com.example.kiinderlernapp.data.datamodels.Quiz
-import com.example.kiinderlernapp.data.localdata.DataBase
-import com.example.kiinderlernapp.data.remoute.CatApi
-import com.example.kiinderlernapp.data.remoute.DogApi
+import com.example.kiinderlernapp.data.datamodels.Tamagotchi
+import com.example.kiinderlernapp.data.localdata.animal.AnimalDataBase
+import com.example.kiinderlernapp.data.localdata.tamagotchi.TamagotchiDataBase
+import com.example.kiinderlernapp.data.remote.CatApi
+import com.example.kiinderlernapp.data.remote.DogApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -29,9 +31,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var index = 0
 
-    private val repo = AppRepository(DogApi, CatApi, DataBase.getDatabase(application))
-
-    val database = DataBase.getDatabase(application)
+    private val repo = AppRepository(DogApi, CatApi, AnimalDataBase.getDatabase(application), TamagotchiDataBase.getDatabase(application))
 
     private var _textToSpeach = MutableLiveData<String>()
     val textToSpeach: LiveData<String>
@@ -39,6 +39,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val animals = repo.animals
     val dataset = repo.dataset
+    val tamagotchi = repo.tamagotchi
+
+    suspend fun updateTamagotchi(tamagotchi: Tamagotchi) {
+        repo.updateTamagotchiStats(tamagotchi)
+    }
+
+    fun insertTamagotchiStats(tamagotchi: Tamagotchi) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.insertTamagotchiStats(tamagotchi)
+        }
+    }
+
+    fun loadDataTamagotchi() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getTamagotchiStats()
+        }
+    }
 
     // Funktion zum Einfügen eines Tierobjekts in die Datenbank
     fun insert(animal: Animal) {
