@@ -63,7 +63,7 @@
         android:id="@+id/textHappinesPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100%"
+        android:text="0%"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -76,7 +76,7 @@
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="100%"
+        android:text="0%"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -89,12 +89,11 @@
         android:id="@+id/textHungryPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100%"
+        android:text="0%"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageHungry"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/imageHungry"
         app:layout_constraintTop_toBottomOf="@+id/imageHungry" />
 
@@ -102,12 +101,12 @@
         android:id="@+id/textSleepPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100%"
+        android:text="0%"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageSleepIndicator"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/imageSleepIndicator"
         app:layout_constraintTop_toBottomOf="@+id/imageSleepIndicator" />
 
@@ -273,5 +272,27 @@
         app:layout_constraintBottom_toBottomOf="@+id/buttonPlay"
         app:layout_constraintStart_toEndOf="@+id/buttonPlay"
         app:layout_constraintTop_toTopOf="@+id/buttonPlay" />
+
+    <ImageView
+        android:id="@+id/imageShit"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/shit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageToiletpaper"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="24dp"
+        android:visibility="gone"
+        android:layout_marginBottom="300dp"
+        android:src="@drawable/toilet_paper"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

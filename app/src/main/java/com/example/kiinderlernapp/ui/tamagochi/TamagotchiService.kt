@@ -12,7 +12,7 @@ class TamagotchiService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Konfiguriere WorkManager, um die Worker-Aufgabe regelmäßig auszuführen
-        val repeatInterval = 1L // Alle paar Sekunden
+        val repeatInterval = 50L // Alle paar Sekunden
         val repeatIntervalTimeUnit = TimeUnit.SECONDS
 
         val constraints = Constraints.Builder()

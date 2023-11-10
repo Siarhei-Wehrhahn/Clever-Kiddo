@@ -6,57 +6,29 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.room.OnConflictStrategy
 import androidx.room.withTransaction
 import com.example.kiinderlernapp.data.datamodels.Tamagotchi
-import com.example.kiinderlernapp.data.localdata.animal.AnimalDataBase
 import kotlinx.coroutines.runBlocking
 
 @Database(entities = [Tamagotchi::class], version = 1)
 abstract class TamagotchiDataBase : RoomDatabase() {
-    abstract val tamagotchiDatabaseDao: TamagotchiDao // Stellt Zugriff auf den Data Access Object (DAO) für Tamagotchis bereit
+    abstract val tamagotchiDatabaseDao: TamagotchiDao
 
     companion object {
-        lateinit var INSTANCE: TamagotchiDataBase
+        private lateinit var INSTANCE: TamagotchiDataBase
 
-        // Funktion zum Abrufen oder Erstellen der Datenbank
         fun getDatabase(context: Context): TamagotchiDataBase {
-            synchronized(AnimalDataBase::class.java) {
+            synchronized(TamagotchiDataBase::class.java) {
                 if (!Companion::INSTANCE.isInitialized) {
-                    // erstelle die Datenbank
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         TamagotchiDataBase::class.java,
-                        "tamagotchi_stats" // Name der Datenbank
+                        "tamagotchi_stats"
                     )
                         .build()
                 }
             }
-            return INSTANCE // Gib die Datenbankinstanz zurück
+            return INSTANCE
         }
     }
-
-        private fun roomDatabaseCallback(context: Context): Callback {
-            return object : Callback() {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    super.onCreate(db)
-                    // Füge Standardwerte in die Datenbank ein, wenn sie erstellt wird
-                    insertDefaultValues(context)
-                }
-            }
-        }
-
-        private fun insertDefaultValues(context: Context) {
-            val database = getDatabase(context)
-            val defaultTamagotchi = Tamagotchi(eat = 100, sleep = 100, joy = 100, toilet = 100,1,1,1,1,1,1,1,1,1,1,)
-            runBlocking {
-                try {
-                    database.withTransaction {
-                        database.tamagotchiDatabaseDao.insertStats(defaultTamagotchi)
-                    }
-                } catch (e: Exception) {
-                    Log.e("TamagotchiDatabase", "${e.message}")
-                }
-            }
-        }
-    }
+}

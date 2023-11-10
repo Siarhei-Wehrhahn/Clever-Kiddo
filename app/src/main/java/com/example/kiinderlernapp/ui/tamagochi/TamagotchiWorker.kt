@@ -35,6 +35,7 @@ class TamagotchiWorker(
 
         if (currentTamagotchi != null) {
             val updatedTamagotchi = Tamagotchi(
+                1,
                 eat = (currentTamagotchi.eat - 1).coerceAtLeast(0),
                 sleep = (currentTamagotchi.sleep - 1).coerceAtLeast(0),
                 joy = (currentTamagotchi.joy - 1).coerceAtLeast(0),

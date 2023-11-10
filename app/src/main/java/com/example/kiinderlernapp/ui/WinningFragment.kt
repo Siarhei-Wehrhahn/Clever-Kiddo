@@ -1,4 +1,4 @@
-package com.example.kiinderlernapp.ui.numberGame
+package com.example.kiinderlernapp.ui
 
 import android.content.Context
 import android.os.Bundle

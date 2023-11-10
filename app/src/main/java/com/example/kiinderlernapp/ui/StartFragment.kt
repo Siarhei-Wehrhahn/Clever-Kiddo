@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 class StartFragment : Fragment() {
 
     private lateinit var binding: FragmentStartBinding
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +31,7 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //viewModel.createDefaultTamagotchi()
 
         Glide.with(this)
             .load(R.raw.loading)
@@ -37,7 +40,7 @@ class StartFragment : Fragment() {
 
         // Verwenden von Kotlin Coroutines, um eine Verzögerung von 3 Sekunden zu erzeugen
         lifecycleScope.launch {
-            delay(3000)
+            delay(6000)
 
             // Navigieren zur HomeFragment-Ansicht nach der Verzögerung
             findNavController().navigate(R.id.action_startFragment_to_homeFragment)

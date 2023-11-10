@@ -41,6 +41,96 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val dataset = repo.dataset
     val tamagotchi = repo.tamagotchi
 
+    fun addItem(item: String) {
+        viewModelScope.launch {
+            when(item) {
+                "tennisBall" -> tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.plus(1)!!"footBall" -> tamagotchi.value?.footBall = tamagotchi.value?.footBall?.plus(1)!!
+
+                "apple" -> tamagotchi.value?.apple = tamagotchi.value?.apple?.plus(1)!!
+
+                "broccoli" -> tamagotchi.value?.apple = tamagotchi.value?.broccoli?.plus(1)!!
+
+                "peas" -> tamagotchi.value?.peas = tamagotchi.value?.peas?.plus(1)!!
+
+                "strawberry" -> tamagotchi.value?.strawberry = tamagotchi.value?.strawberry?.plus(1)!!
+
+                "pomegrenade" -> tamagotchi.value?.pomegrenade = tamagotchi.value?.pomegrenade?.plus(1)!!
+
+                "cucumber" -> tamagotchi.value?.cucumber = tamagotchi.value?.cucumber?.plus(1)!!
+
+                "kiwi" -> tamagotchi.value?.kiwi = tamagotchi.value?.kiwi?.plus(1)!!
+
+                "salat" -> tamagotchi.value?.salat = tamagotchi.value?.salat?.plus(1)!!
+            }
+            repo.insertTamagotchiStats(tamagotchi.value!!)
+        }
+    }
+
+    fun removeItem(item: String) {
+        viewModelScope.launch {
+            when(item) {
+                "tennisBall" -> {
+                        tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.minus(1)!!
+                        tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(15)!!
+                }
+
+                "footBall" -> {
+                        tamagotchi.value?.footBall = tamagotchi.value?.footBall?.minus(1)!!
+                        tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(20)!!
+                }
+
+                "apple" -> {
+                        tamagotchi.value?.apple = tamagotchi.value?.apple?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                }
+
+                "broccoli" -> {
+                        tamagotchi.value?.broccoli = tamagotchi.value?.broccoli?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                }
+
+                "peas" -> {
+                        tamagotchi.value?.peas = tamagotchi.value?.peas?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                }
+
+                "strawberry" -> {
+                        tamagotchi.value?.strawberry = tamagotchi.value?.strawberry?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                }
+
+                "pomegrenade" -> {
+                        tamagotchi.value?.pomegrenade = tamagotchi.value?.pomegrenade?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(20)!!
+                }
+
+                "cucumber" -> {
+                        tamagotchi.value?.cucumber = tamagotchi.value?.cucumber?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                }
+
+                "kiwi" -> {
+                        tamagotchi.value?.kiwi = tamagotchi.value?.kiwi?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                }
+
+                "salat" -> {
+                        tamagotchi.value?.salat = tamagotchi.value?.salat?.minus(1)!!
+                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                }
+            }
+            repo.insertTamagotchiStats(tamagotchi.value!!)
+            repo.getTamagotchiStats()
+        }
+    }
+
+    fun createDefaultTamagotchi() {
+        loadDataTamagotchi()
+        if (tamagotchi.value == null) {
+            insertTamagotchiStats(Tamagotchi(1,100,100,100,100,1,1,1,1,1,1,1,1,1,1))
+        }
+    }
+
     suspend fun updateTamagotchi(tamagotchi: Tamagotchi) {
         repo.updateTamagotchiStats(tamagotchi)
     }

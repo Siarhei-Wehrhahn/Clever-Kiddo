@@ -32,14 +32,15 @@ class AppRepository(
         get() = _dataset
 
     private val _tamagotchi = MutableLiveData<Tamagotchi>()
-    val tamagotchi: LiveData<Tamagotchi>
+    val tamagotchi: MutableLiveData<Tamagotchi>
         get() = _tamagotchi
+
 
     suspend fun updateTamagotchiStats(tamagotchi: Tamagotchi) {
         try {
             tamagotchiDatabase.tamagotchiDatabaseDao.updateStats(tamagotchi)
         } catch (e: Exception) {
-            Log.e("&log", "${e.message}")
+            Log.e("$log", "${e.message}")
         }
     }
 

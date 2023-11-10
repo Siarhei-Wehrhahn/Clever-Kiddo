@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/winningFragment"
-        android:name="com.example.kiinderlernapp.ui.numberGame.WinningFragment"
+        android:name="com.example.kiinderlernapp.ui.WinningFragment"
         android:label="fragment_winning"
         tools:layout="@layout/fragment_winning" >
         <action
