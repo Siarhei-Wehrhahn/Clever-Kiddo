@@ -49,9 +49,9 @@ class TamagotchiWorker(
                 0,
                 0,
                 0,
+                0,
                 0
             )
-
             repo.updateTamagotchiStats(updatedTamagotchi)
         }
     }

@@ -39,6 +39,7 @@ import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.data.datamodels.Tamagotchi
 import com.example.kiinderlernapp.databinding.FragmentTamagochiBinding
 import com.example.kiinderlernapp.ui.MainViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -88,7 +89,7 @@ class TamagochiFragment : Fragment() {
         val sleep = viewModel.tamagotchi.value?.sleep?.toString()?.toIntOrNull() ?: 0
 
         viewModel.tamagotchi.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 updateDatabase(it)
                 viewModel.insertTamagotchiStats(it)
             }
