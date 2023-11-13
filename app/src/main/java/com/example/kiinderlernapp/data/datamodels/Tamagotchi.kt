@@ -21,5 +21,6 @@ data class Tamagotchi(
     var pomegrenade: Int = 1,
     var cucumber: Int = 1,
     var kiwi: Int = 1,
-    var salat: Int = 1
+    var salat: Int = 1,
+    var toiletPaper: Int = 1
 )

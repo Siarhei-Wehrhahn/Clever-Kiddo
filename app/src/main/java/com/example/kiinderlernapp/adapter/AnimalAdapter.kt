@@ -49,6 +49,11 @@ class AnimalAdapter(
             if (!animal.isDog) {
                 // Navigiere zum winningFragment, wenn es sich nicht um einen Hund handelt
                 navController.navigate(R.id.action_animalFragment_to_winningFragment)
+                if (mMediaPlayer == null) {
+                    mMediaPlayer = MediaPlayer.create(holder.itemView.context, R.raw.success)
+                    mMediaPlayer!!.isLooping = false
+                    mMediaPlayer!!.start()
+                } else mMediaPlayer!!.start()
             } else {
                 // Spiele einen Sound ab, um anzuzeigen, dass die Antwort falsch ist
                 if (mMediaPlayer == null) {
@@ -64,6 +69,11 @@ class AnimalAdapter(
             if (animal.isDog) {
                 // Navigiere zum winningFragment, wenn es sich um einen Hund handelt
                 navController.navigate(R.id.action_animalFragment_to_winningFragment)
+                if (mMediaPlayer == null) {
+                    mMediaPlayer = MediaPlayer.create(holder.itemView.context, R.raw.success)
+                    mMediaPlayer!!.isLooping = false
+                    mMediaPlayer!!.start()
+                } else mMediaPlayer!!.start()
             } else {
                 // Spiele einen Sound ab, um anzuzeigen, dass die Antwort falsch ist
                 if (mMediaPlayer == null) {

@@ -61,6 +61,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 "kiwi" -> tamagotchi.value?.kiwi = tamagotchi.value?.kiwi?.plus(1)!!
 
                 "salat" -> tamagotchi.value?.salat = tamagotchi.value?.salat?.plus(1)!!
+
+                "toilet_paper" -> tamagotchi.value?.toiletPaper = tamagotchi.value?.toiletPaper?.plus(1)!!
             }
             repo.insertTamagotchiStats(tamagotchi.value!!)
         }
@@ -69,12 +71,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun removeItem(item: String) {
         viewModelScope.launch {
             when(item) {
-                "tennisBall" -> {
+                "tennisball" -> {
                         tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.minus(1)!!
                         tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(15)!!
                 }
 
-                "footBall" -> {
+                "football" -> {
                         tamagotchi.value?.footBall = tamagotchi.value?.footBall?.minus(1)!!
                         tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(20)!!
                 }
@@ -117,6 +119,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 "salat" -> {
                         tamagotchi.value?.salat = tamagotchi.value?.salat?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                }
+
+                "toilet_paper" -> {
+                    tamagotchi.value?.toiletPaper = tamagotchi.value?.toiletPaper?.minus(1)!!
+                    tamagotchi.value?.toilet = 100
                 }
             }
             repo.insertTamagotchiStats(tamagotchi.value!!)

@@ -75,7 +75,7 @@ class TamagochiFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.createDefaultTamagotchi()
+        viewModel.loadDataTamagotchi()
 
         binding.buttonSleep.setOnClickListener {
             viewModel.addItem("apple")
@@ -97,32 +97,6 @@ class TamagochiFragment : Fragment() {
                 binding.textHungryPercent.text = it?.eat.toString() + "%"
                 binding.textSleepPercent.text = it?.sleep.toString() + "%"
                 binding.textToiletPercent.text = it?.toilet.toString() + "%"
-            }
-
-            if (joy < (50..65).random() && toilet > 15 && eat > 30 && sleep > 20) {
-                binding.imageTamagotchi.setImageResource(R.drawable.neutral)
-            } else if (joy < (30..40).random() && toilet > 15 && eat > 30 && sleep > 20) {
-                binding.imageTamagotchi.setImageResource(R.drawable.angry)
-            } else {
-                binding.imageTamagotchi.setImageResource(R.drawable.scared)
-            }
-
-            if (eat < (15..30).random() && toilet > 15 && joy > 30 && sleep > 20) {
-                binding.imageTamagotchi.setImageResource(R.drawable.shoked)
-            } else {
-                binding.imageTamagotchi.setImageResource(R.drawable.scared)
-            }
-
-            if (joy < 20 && toilet < 15 && eat < 30 && sleep < 20) {
-                binding.imageTamagotchi.setImageResource(R.drawable.angryred)
-            } else {
-                binding.imageTamagotchi.setImageResource(R.drawable.scared)
-            }
-
-            if (sleep < 20 && toilet > 15 && eat > 30 && joy > 20) {
-                binding.imageTamagotchi.setImageResource(R.drawable.neutral)
-            } else {
-                binding.imageTamagotchi.setImageResource(R.drawable.scared)
             }
 
             if (tamagotchi != null) {
@@ -212,12 +186,15 @@ class TamagochiFragment : Fragment() {
                     binding.feddingScrollV.isVisible = false
                 }
             }
-            if (!binding.imageFotball.isVisible && viewModel.tamagotchi.value?.footBall!! > 0 && !binding.imageTennisball.isVisible && viewModel.tamagotchi.value?.tennisBall!! > 0) {
-                binding.imageFotball.isVisible = true
-                binding.imageTennisball.isVisible = true
+            if (!binding.imageFotball.isVisible && viewModel.tamagotchi.value?.footBall!! > 0) {
+                binding.imageFotball.visibility = VISIBLE
             } else {
-                binding.imageFotball.isVisible = false
-                binding.imageTennisball.isVisible = false
+                binding.imageFotball.visibility = GONE
+            }
+            if (!binding.imageTennisball.isVisible && viewModel.tamagotchi.value?.tennisBall!! > 0) {
+                binding.imageTennisball.visibility = VISIBLE
+            } else {
+                binding.imageTennisball.visibility = GONE
             }
             if (viewModel.tamagotchi.value?.footBall!! == 0 && viewModel.tamagotchi.value?.tennisBall!! == 0) {
                 Toast.makeText(requireContext(),"Du hast leider keine Bälle!", Toast.LENGTH_SHORT).show()
@@ -247,7 +224,7 @@ class TamagochiFragment : Fragment() {
 
         binding.imageToiletpaper.setOnTouchListener { view, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
-                val clipData = ClipData.newPlainText("tennisball", "tennisball")
+                val clipData = ClipData.newPlainText("", "toilet_paper")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
                 view.visibility = VISIBLE
@@ -259,7 +236,7 @@ class TamagochiFragment : Fragment() {
 
         binding.imageTennisball.setOnTouchListener { view, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
-                val clipData = ClipData.newPlainText("tennisball", "tennisball")
+                val clipData = ClipData.newPlainText("", "tennisball")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
                 view.visibility = VISIBLE
@@ -470,7 +447,7 @@ class TamagochiFragment : Fragment() {
 
                         "toilet_paper" -> {
                             if (viewModel.tamagotchi.value?.toilet!! < 90) {
-                                viewModel.removeItem("toilet_paper")
+                                binding.imageToiletpaper.visibility = GONE
 
                                 binding.imageTamagotchi.setImageResource(R.drawable.nerdy_grinnging)
                                 val window = requireActivity().window
@@ -485,6 +462,7 @@ class TamagochiFragment : Fragment() {
                                 // Hier füge deine Verzögerungslogik ein, z.B. eine Coroutine mit delay
                                 lifecycleScope.launch {
                                     delay(10000) // Blockiere den Bildschirm für 5 Sekunden
+                                    viewModel.removeItem("toilet_paper")
                                     // Bildschirm freigeben
                                     binding.imageTamagotchi.setImageResource(R.drawable.happy)
                                     params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
