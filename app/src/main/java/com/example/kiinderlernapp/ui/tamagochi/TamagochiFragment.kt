@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ComponentName
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
@@ -18,9 +19,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.DragShadowBuilder
 import android.view.View.GONE
+import android.view.View.VIEW_LOG_TAG
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.Window
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationSet
@@ -48,19 +49,7 @@ class TamagochiFragment : Fragment() {
     private lateinit var binding: FragmentTamagochiBinding
     private val viewModel: MainViewModel by activityViewModels()
     private var tamagotchiService: TamagotchiService? = null
-    private val tamagotchi = Tamagotchi(1, 100, 100, 100, 100, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     private var isScreenBlocked = false
-
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as TamagotchiService
-            tamagotchiService = binder.getSystemService()
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            tamagotchiService = null
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,37 +57,60 @@ class TamagochiFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTamagochiBinding.inflate(inflater, container, false)
-        val serviceIntent = Intent(requireContext(), TamagotchiService::class.java)
-        requireContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
         return binding.root
     }
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Log.e(TAG, "onServiceConnected aufgerufen")
+
+            if (service is TamagotchiBinder) {
+                tamagotchiService = service.getService()
+            } else {
+                Log.e(TAG, "Fehler bei der Typkonvertierung: Das übergebene IBinder ist keine Instanz von TamagotchiBinder.")
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Log.e(TAG, "onServiceDisconnected aufgerufen")
+            tamagotchiService = null
+        }
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val serviceIntent = Intent(requireContext(), TamagotchiService::class.java)
+        requireContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+        requireContext().startService(serviceIntent)  // Service starten
+
         viewModel.loadDataTamagotchi()
 
         binding.buttonSleep.setOnClickListener {
             viewModel.addItem("apple")
         }
 
-        // Ohne null prüfung stürzt die app ab
-        val joy = viewModel.tamagotchi.value?.joy?.toString()?.toIntOrNull() ?: 0
-        val toilet = viewModel.tamagotchi.value?.toilet?.toString()?.toIntOrNull() ?: 0
-        val eat = viewModel.tamagotchi.value?.eat?.toString()?.toIntOrNull() ?: 0
-        val sleep = viewModel.tamagotchi.value?.sleep?.toString()?.toIntOrNull() ?: 0
-
         viewModel.tamagotchi.observe(viewLifecycleOwner) {
             lifecycleScope.launch(Dispatchers.IO) {
+                delay(1000)
                 updateDatabase(it)
                 viewModel.insertTamagotchiStats(it)
             }
+
             it.let {
                 binding.textHappinesPercent.text = it?.joy.toString() + "%"
                 binding.textHungryPercent.text = it?.eat.toString() + "%"
                 binding.textSleepPercent.text = it?.sleep.toString() + "%"
                 binding.textToiletPercent.text = it?.toilet.toString() + "%"
             }
+        }
+
+        binding.foodButton.setOnClickListener {
+            binding.imageToiletpaper.visibility = GONE
+            val tamagotchi = viewModel.tamagotchi.value
+            binding.imageFotball.isVisible = false
+            binding.imageTennisball.isVisible = false
 
             if (tamagotchi != null) {
                 if (tamagotchi.apple == 0) {
@@ -137,20 +149,15 @@ class TamagochiFragment : Fragment() {
                     binding.imageKiwi.visibility = VISIBLE
                 }
             }
-        }
 
-        binding.foodButton.setOnClickListener {
-            binding.imageToiletpaper.visibility = GONE
-            val tamagotchi = viewModel.tamagotchi.value
-            binding.imageFotball.isVisible = false
-            binding.imageTennisball.isVisible = false
             if (tamagotchi?.apple != 0 ||
                 tamagotchi?.broccoli != 0 ||
                 tamagotchi?.peas != 0 ||
                 tamagotchi?.strawberry != 0 ||
                 tamagotchi?.pomegrenade != 0 ||
                 tamagotchi?.cucumber != 0 ||
-                tamagotchi?.kiwi != 0) {
+                tamagotchi?.kiwi != 0
+            ) {
                 if (binding.feddingScrollV.scaleX == 1f) {
                     val scaleUp = ObjectAnimator.ofFloat(binding.feddingScrollV, "scaleX", 0.01f)
                     val animation = AnimatorSet()
@@ -170,7 +177,11 @@ class TamagochiFragment : Fragment() {
                     animation.start()
                 }
             } else {
-                Toast.makeText(requireContext(),"Du hast leider nicht zu Essen!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Du hast leider nicht zu Essen!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -198,7 +209,8 @@ class TamagochiFragment : Fragment() {
                 binding.imageTennisball.visibility = GONE
             }
             if (viewModel.tamagotchi.value?.footBall!! == 0 && viewModel.tamagotchi.value?.tennisBall!! == 0) {
-                Toast.makeText(requireContext(),"Du hast leider keine Bälle!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Du hast leider keine Bälle!", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -455,7 +467,8 @@ class TamagochiFragment : Fragment() {
                                 val params = window.attributes
 
                                 // Bildschirm blockieren
-                                params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                                params.flags =
+                                    params.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                                 window.attributes = params
 
                                 isScreenBlocked = true
@@ -466,7 +479,8 @@ class TamagochiFragment : Fragment() {
                                     viewModel.removeItem("toilet_paper")
                                     // Bildschirm freigeben
                                     binding.imageTamagotchi.setImageResource(R.drawable.happy)
-                                    params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
+                                    params.flags =
+                                        params.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
                                     window.attributes = params
                                     isScreenBlocked = false
                                 }

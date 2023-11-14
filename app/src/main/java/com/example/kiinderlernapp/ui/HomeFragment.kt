@@ -78,6 +78,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.tamagotchi.setOnClickListener {
+            viewModel.loadDataTamagotchi()
             findNavController().navigate(R.id.action_homeFragment_to_tamagochiFragment)
         }
     }

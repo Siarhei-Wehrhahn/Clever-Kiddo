@@ -35,23 +35,24 @@ class TamagotchiWorker(
 
         if (currentTamagotchi != null) {
             val updatedTamagotchi = Tamagotchi(
-                1,
+                0,
                 eat = (currentTamagotchi.eat - 1).coerceAtLeast(0),
                 sleep = (currentTamagotchi.sleep - 1).coerceAtLeast(0),
                 joy = (currentTamagotchi.joy - 1).coerceAtLeast(0),
                 toilet = (currentTamagotchi.toilet - 1).coerceAtLeast(0),
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0
+                tennisBall = currentTamagotchi.tennisBall,
+                footBall = currentTamagotchi.footBall,
+                apple = currentTamagotchi.apple,
+                broccoli = currentTamagotchi.broccoli,
+                peas = currentTamagotchi.peas,
+                strawberry = currentTamagotchi.strawberry,
+                pomegrenade = currentTamagotchi.pomegrenade,
+                cucumber = currentTamagotchi.cucumber,
+                kiwi = currentTamagotchi.kiwi,
+                salat = currentTamagotchi.salat,
+                toiletPaper = currentTamagotchi.toiletPaper
             )
+
             repo.updateTamagotchiStats(updatedTamagotchi)
         }
     }

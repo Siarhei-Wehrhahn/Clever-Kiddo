@@ -44,7 +44,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun addItem(item: String) {
         viewModelScope.launch {
             when(item) {
-                "tennisBall" -> tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.plus(1)!!"footBall" -> tamagotchi.value?.footBall = tamagotchi.value?.footBall?.plus(1)!!
+                "tennisBall" -> tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.plus(1)!!
+
+                "footBall" -> tamagotchi.value?.footBall = tamagotchi.value?.footBall?.plus(1)!!
 
                 "apple" -> tamagotchi.value?.apple = tamagotchi.value?.apple?.plus(1)!!
 
@@ -128,13 +130,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
             repo.insertTamagotchiStats(tamagotchi.value!!)
             repo.getTamagotchiStats()
-        }
-    }
-
-    fun createDefaultTamagotchi() {
-        loadDataTamagotchi()
-        if (tamagotchi.value == null) {
-            insertTamagotchiStats(Tamagotchi(1,100,100,100,100,1,1,1,1,1,1,1,1,1,1))
         }
     }
 
