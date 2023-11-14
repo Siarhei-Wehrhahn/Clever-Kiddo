@@ -40,7 +40,7 @@ class WinningFragment : Fragment() {
         val editor = sharedPref.edit()
 
         // Die aktuelle Punktzahl im SharedPreferences speichern
-        editor.putInt("score", viewModel.score)
+        editor.putInt("score", viewModel.score.value!!)
         editor.apply()
 
         // Eine Verzögerung von 3 Sekunden, bevor zur vorherigen Ansicht zurücknavigiert wird

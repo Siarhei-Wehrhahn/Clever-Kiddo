@@ -1,5 +1,6 @@
-package com.example.kiinderlernapp.ui.vegetable
+package com.example.kiinderlernapp.ui.quiz
 
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -10,15 +11,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.databinding.FragmentVegetableBinding
 import com.example.kiinderlernapp.ui.MainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class VegetableFragment : Fragment(),TextToSpeech.OnInitListener {
+class QuizFragment : Fragment(),TextToSpeech.OnInitListener {
 
     private lateinit var binding: FragmentVegetableBinding
     private val viewModel: MainViewModel by activityViewModels()
@@ -67,7 +66,17 @@ class VegetableFragment : Fragment(),TextToSpeech.OnInitListener {
                 if (answer) {
                     binding.imagePlus2.isVisible = true
                     binding.imageStar.isVisible = true
+
+                    // Das ViewModel aktualisiert die Anzahl der gewonnenen Sterne
                     viewModel.winStars()
+
+                    // Ein SharedPreferences-Objekt erstellen, um die Punktzahl zu speichern
+                    val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPref.edit()
+
+                    // Die aktuelle Punktzahl im SharedPreferences speichern
+                    editor.putInt("score", viewModel.score.value!!)
+                    editor.apply()
 
                     // Verzögerung, bevor zur nächsten Frage gewechselt wird
                     lifecycleScope.launch {

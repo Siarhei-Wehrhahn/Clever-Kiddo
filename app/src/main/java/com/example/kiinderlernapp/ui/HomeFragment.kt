@@ -50,11 +50,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Hier wird auf die SharedPreferences zugegriffen, um den Punktestand zu laden und anzuzeigen.
         val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        viewModel.score = sharedPref.getInt("score", 0)
-        binding.textScore.text = viewModel.score.toString()
+        viewModel._score.value = sharedPref.getInt("score", 0)
+
+        binding.textScore.text = viewModel.score.value.toString()
+
+        viewModel.score.observe(viewLifecycleOwner) {
+            binding.textScore.text = viewModel.score.value.toString()
+        }
 
         // Die folgenden Abschnitte sind Klick-Handler für die verschiedenen Optionen im HomeFragment.
         binding.colorGame.setOnClickListener {
@@ -78,8 +82,11 @@ class HomeFragment : Fragment() {
         }
 
         binding.tamagotchi.setOnClickListener {
-            viewModel.loadDataTamagotchi()
             findNavController().navigate(R.id.action_homeFragment_to_tamagochiFragment)
+        }
+
+        binding.shop.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_shopFragment)
         }
     }
 }

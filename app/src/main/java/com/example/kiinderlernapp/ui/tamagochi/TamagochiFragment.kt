@@ -57,6 +57,30 @@ class TamagochiFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTamagochiBinding.inflate(inflater, container, false)
+
+        // Setze den OnBackPressedCallback
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isScreenBlocked) {
+
+                    // Alert
+                    AlertDialog.Builder(requireContext())
+                        .setMessage("Möchten sie die App schließen?")
+                        .setPositiveButton("Ja") { _, _ ->
+                            requireActivity().finish()
+                        }
+                        .setNegativeButton("Nein", null)
+                        .show()
+                } else {
+
+                    // Wenn der Bildschirm nicht blockiert ist, handle das Zurückswipen normal
+                    isEnabled = false
+                    findNavController().navigateUp()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         return binding.root
     }
 
@@ -67,7 +91,10 @@ class TamagochiFragment : Fragment() {
             if (service is TamagotchiBinder) {
                 tamagotchiService = service.getService()
             } else {
-                Log.e(TAG, "Fehler bei der Typkonvertierung: Das übergebene IBinder ist keine Instanz von TamagotchiBinder.")
+                Log.e(
+                    TAG,
+                    "Fehler bei der Typkonvertierung: Das übergebene IBinder ist keine Instanz von TamagotchiBinder."
+                )
             }
         }
 
@@ -85,24 +112,57 @@ class TamagochiFragment : Fragment() {
         requireContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
         requireContext().startService(serviceIntent)  // Service starten
 
-        viewModel.loadDataTamagotchi()
-
         binding.buttonSleep.setOnClickListener {
             viewModel.addItem("apple")
         }
 
-        viewModel.tamagotchi.observe(viewLifecycleOwner) {
+        viewModel.tamagotchi.observe(viewLifecycleOwner) { tamagotchi ->
             lifecycleScope.launch(Dispatchers.IO) {
                 delay(1000)
-                updateDatabase(it)
-                viewModel.insertTamagotchiStats(it)
+                viewModel.updateTamagotchi(tamagotchi)
+                viewModel.insertTamagotchiStats(tamagotchi)
             }
 
-            it.let {
-                binding.textHappinesPercent.text = it?.joy.toString() + "%"
-                binding.textHungryPercent.text = it?.eat.toString() + "%"
-                binding.textSleepPercent.text = it?.sleep.toString() + "%"
-                binding.textToiletPercent.text = it?.toilet.toString() + "%"
+            binding.textHappinesPercent.text = tamagotchi?.joy.toString() + "%"
+            binding.textHungryPercent.text = tamagotchi?.eat.toString() + "%"
+            binding.textSleepPercent.text = tamagotchi?.sleep.toString() + "%"
+            binding.textToiletPercent.text = tamagotchi?.toilet.toString() + "%"
+
+
+            if (tamagotchi.apple <= 0) {
+                binding.imageApple.visibility = GONE
+            } else {
+                binding.imageApple.visibility = VISIBLE
+            }
+            if (tamagotchi.broccoli <= 0) {
+                binding.imageBroccoli.visibility = GONE
+            } else {
+                binding.imageBroccoli.visibility = VISIBLE
+            }
+            if (tamagotchi.peas <= 0) {
+                binding.imagePeas.visibility = GONE
+            } else {
+                binding.imagePeas.visibility = VISIBLE
+            }
+            if (tamagotchi.strawberry <= 0) {
+                binding.imageStrawberry.visibility = GONE
+            } else {
+                binding.imageStrawberry.visibility = VISIBLE
+            }
+            if (tamagotchi.pomegrenade <= 0) {
+                binding.imagePomegrenade.visibility = GONE
+            } else {
+                binding.imagePomegrenade.visibility = VISIBLE
+            }
+            if (tamagotchi.cucumber <= 0) {
+                binding.imageCucumber.visibility = GONE
+            } else {
+                binding.imageCucumber.visibility = VISIBLE
+            }
+            if (tamagotchi.kiwi <= 0) {
+                binding.imageKiwi.visibility = GONE
+            } else {
+                binding.imageKiwi.visibility = VISIBLE
             }
         }
 
@@ -111,44 +171,6 @@ class TamagochiFragment : Fragment() {
             val tamagotchi = viewModel.tamagotchi.value
             binding.imageFotball.isVisible = false
             binding.imageTennisball.isVisible = false
-
-            if (tamagotchi != null) {
-                if (tamagotchi.apple == 0) {
-                    binding.imageApple.visibility = GONE
-                } else {
-                    binding.imageApple.visibility = VISIBLE
-                }
-                if (tamagotchi.broccoli == 0) {
-                    binding.imageBroccoli.visibility = GONE
-                } else {
-                    binding.imageBroccoli.visibility = VISIBLE
-                }
-                if (tamagotchi.peas == 0) {
-                    binding.imagePeas.visibility = GONE
-                } else {
-                    binding.imagePeas.visibility = VISIBLE
-                }
-                if (tamagotchi.strawberry == 0) {
-                    binding.imageStrawberry.visibility = GONE
-                } else {
-                    binding.imageStrawberry.visibility = VISIBLE
-                }
-                if (tamagotchi.pomegrenade == 0) {
-                    binding.imagePomegrenade.visibility = GONE
-                } else {
-                    binding.imagePomegrenade.visibility = VISIBLE
-                }
-                if (tamagotchi.cucumber == 0) {
-                    binding.imageCucumber.visibility = GONE
-                } else {
-                    binding.imageCucumber.visibility = VISIBLE
-                }
-                if (tamagotchi.kiwi == 0) {
-                    binding.imageKiwi.visibility = GONE
-                } else {
-                    binding.imageKiwi.visibility = VISIBLE
-                }
-            }
 
             if (tamagotchi?.apple != 0 ||
                 tamagotchi?.broccoli != 0 ||
@@ -240,7 +262,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "toilet_paper")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.toiletPaper!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -252,7 +278,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "tennisball")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.tennisBall!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -264,7 +294,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "football")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.footBall!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -276,7 +310,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "apple")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.apple!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -288,7 +326,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "broccoli")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.broccoli!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -300,7 +342,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "peas")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.peas!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -312,7 +358,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "strawberry")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.strawberry!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -324,7 +374,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "pomegrenade")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.pomegrenade!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -336,7 +390,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "cucumber")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.cucumber!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -348,7 +406,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "kiwi")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.kiwi!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -360,7 +422,11 @@ class TamagochiFragment : Fragment() {
                 val clipData = ClipData.newPlainText("", "salat")
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
-                view.visibility = VISIBLE
+
+                if (viewModel.tamagotchi.value?.toiletPaper!! > 0) {
+                    view.visibility = VISIBLE
+                }
+
                 true
             } else {
                 false
@@ -528,10 +594,6 @@ class TamagochiFragment : Fragment() {
         binding.imageTamagotchi.startAnimation(animationSet)
     }
 
-    private suspend fun updateDatabase(tamagotchi: Tamagotchi) {
-        viewModel.updateTamagotchi(tamagotchi)
-    }
-
     private fun bigDelayToNormal() {
         lifecycleScope.launch {
             delay(1000)
@@ -544,33 +606,6 @@ class TamagochiFragment : Fragment() {
             delay(1000)
             binding.imageTamagotchi.setImageResource(R.drawable.happy)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // Setze den OnBackPressedCallback
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (isScreenBlocked) {
-
-                    // Alert
-                    AlertDialog.Builder(requireContext())
-                        .setMessage("Möchten sie die App schließen?")
-                        .setPositiveButton("Ja") { _, _ ->
-                            requireActivity().finish()
-                        }
-                        .setNegativeButton("Nein", null)
-                        .show()
-                } else {
-
-                    // Wenn der Bildschirm nicht blockiert ist, handle das Zurückswipen normal
-                    isEnabled = false
-                    findNavController().popBackStack()
-                }
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     // Entferne den OnBackPressedCallback(zurück)

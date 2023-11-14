@@ -3,6 +3,7 @@ package com.example.kiinderlernapp.ui
 import android.app.Application
 import android.content.Context
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,12 +22,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    // Score-Verwaltung
-    var score = 0
+
+    val _score = MutableLiveData(0)
+    val score : LiveData<Int>
+        get() = _score
 
     // Funktion zum Hinzufügen von Punkten (Sterne)
     fun winStars() {
-        score += 2
+        _score.value = _score.value?.plus(2)
+    }
+
+    fun removeStars(stars: Int) {
+        _score.value = _score.value?.minus(stars)
     }
 
     private var index = 0
@@ -42,11 +49,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val tamagotchi = repo.tamagotchi
 
     fun addItem(item: String) {
+        Log.e("Viewmodel", tamagotchi.value.toString())
         viewModelScope.launch {
             when(item) {
-                "tennisBall" -> tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.plus(1)!!
+                "tennisball" -> tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.plus(1)!!
 
-                "footBall" -> tamagotchi.value?.footBall = tamagotchi.value?.footBall?.plus(1)!!
+                "football" -> tamagotchi.value?.footBall = tamagotchi.value?.footBall?.plus(1)!!
 
                 "apple" -> tamagotchi.value?.apple = tamagotchi.value?.apple?.plus(1)!!
 

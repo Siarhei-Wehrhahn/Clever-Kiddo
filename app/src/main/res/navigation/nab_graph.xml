@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_homeFragment_to_tamagochiFragment"
             app:destination="@id/tamagochiFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -97,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/vegetableFragment"
-        android:name="com.example.kiinderlernapp.ui.vegetable.VegetableFragment"
+        android:name="com.example.kiinderlernapp.ui.quiz.QuizFragment"
         android:label="fragment_vegetable"
         tools:layout="@layout/fragment_vegetable" >
         <action
@@ -114,6 +117,15 @@
         tools:layout="@layout/fragment_tamagochi" >
         <action
             android:id="@+id/action_tamagochiFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.example.kiinderlernapp.ui.shop.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" >
+        <action
+            android:id="@+id/action_shopFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

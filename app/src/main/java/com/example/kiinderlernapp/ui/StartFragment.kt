@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.kiinderlernapp.R
+import com.example.kiinderlernapp.data.datamodels.Tamagotchi
 import com.example.kiinderlernapp.databinding.FragmentStartBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +33,32 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //viewModel.createDefaultTamagotchi()
+        lifecycleScope.launch {
+            if (viewModel.tamagotchi == null) {
+                viewModel.updateTamagotchi(
+                    Tamagotchi(
+                        0,
+                        100,
+                        100,
+                        100,
+                        100,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1
+                    )
+                )
+            }
+        }
+
+        viewModel.loadDataTamagotchi()
 
         Glide.with(this)
             .load(R.raw.loading)

@@ -7,6 +7,28 @@
     tools:context=".ui.shop.ShopFragment">
 
     <TextView
+        android:id="@+id/textStarCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageStars"
+        app:layout_constraintEnd_toStartOf="@+id/imageStars"
+        app:layout_constraintTop_toTopOf="@+id/imageStars" />
+
+    <ImageView
+        android:id="@+id/imageStars"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/winning_star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,21 +51,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6">
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/lebensmittel"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lebensmittel" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/spielzeug"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Spielzeug" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/toiletenpapier"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,17 +73,18 @@
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recShop"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
         android:paddingLeft="12dp"
         android:paddingEnd="12dp"
-        app:spanCount="3"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toggleButton"
-        tools:listitem="@layout/list_item_shop"
-        tools:itemCount="30"/>
+        app:spanCount="3"
+        tools:itemCount="30"
+        tools:listitem="@layout/list_item_shop" />
 </androidx.constraintlayout.widget.ConstraintLayout>
