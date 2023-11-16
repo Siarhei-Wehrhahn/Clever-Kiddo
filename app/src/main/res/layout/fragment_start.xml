@@ -9,8 +9,9 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="800dp"
-        android:layout_height="800dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:src="@drawable/a_background_for_kids_wich_have_many_colors_and_maybe_small_comic_dogs_and_cats_and_the_pets_are_in__3566878771"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

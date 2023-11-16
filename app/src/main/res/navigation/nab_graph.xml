@@ -102,7 +102,7 @@
         android:id="@+id/vegetableFragment"
         android:name="com.example.kiinderlernapp.ui.quiz.QuizFragment"
         android:label="fragment_vegetable"
-        tools:layout="@layout/fragment_vegetable" >
+        tools:layout="@layout/fragment_quiz" >
         <action
             android:id="@+id/action_vegetableFragment_to_homeFragment"
             app:destination="@id/homeFragment" />

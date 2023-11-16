@@ -39,7 +39,7 @@ class ShopAdapter(
 
         holder.binding.item.setOnClickListener {
             if (viewModel.score.value!! >= item.price) {
-                viewModel.addItem("apple")
+                viewModel.addItem(item.item)
                 viewModel.removeStars(item.price)
 
                 // Ein SharedPreferences-Objekt erstellen, um die Punktzahl zu speichern

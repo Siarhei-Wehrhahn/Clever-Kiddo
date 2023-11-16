@@ -11,7 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.kiinderlernapp.databinding.FragmentVegetableBinding
+import com.example.kiinderlernapp.databinding.FragmentQuizBinding
 import com.example.kiinderlernapp.ui.MainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import java.util.Locale
 
 class QuizFragment : Fragment(),TextToSpeech.OnInitListener {
 
-    private lateinit var binding: FragmentVegetableBinding
+    private lateinit var binding: FragmentQuizBinding
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var textToSpeech: TextToSpeech
 
@@ -33,7 +33,7 @@ class QuizFragment : Fragment(),TextToSpeech.OnInitListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentVegetableBinding.inflate(inflater, container, false)
+        binding = FragmentQuizBinding.inflate(inflater, container, false)
         return binding.root
     }
 
