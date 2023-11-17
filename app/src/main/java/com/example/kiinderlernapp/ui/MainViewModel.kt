@@ -20,8 +20,13 @@ import com.example.kiinderlernapp.data.remote.CatApi
 import com.example.kiinderlernapp.data.remote.DogApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+    private var _time = MutableLiveData<String>()
+    val time : LiveData<String>
+        get() = _time
 
     val _score = MutableLiveData(0)
     val score : LiveData<Int>
@@ -84,56 +89,67 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 "tennisball" -> {
                         tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.minus(1)!!
                         tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(15)!!
+                        setTime(LocalDateTime.now().toString())
                 }
 
                 "football" -> {
                         tamagotchi.value?.footBall = tamagotchi.value?.footBall?.minus(1)!!
                         tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(20)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "apple" -> {
                         tamagotchi.value?.apple = tamagotchi.value?.apple?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "broccoli" -> {
                         tamagotchi.value?.broccoli = tamagotchi.value?.broccoli?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "peas" -> {
                         tamagotchi.value?.peas = tamagotchi.value?.peas?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "strawberry" -> {
                         tamagotchi.value?.strawberry = tamagotchi.value?.strawberry?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "pomegrenade" -> {
                         tamagotchi.value?.pomegrenade = tamagotchi.value?.pomegrenade?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(20)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "cucumber" -> {
                         tamagotchi.value?.cucumber = tamagotchi.value?.cucumber?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "kiwi" -> {
                         tamagotchi.value?.kiwi = tamagotchi.value?.kiwi?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "salat" -> {
                         tamagotchi.value?.salat = tamagotchi.value?.salat?.minus(1)!!
                         tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "toilet_paper" -> {
                     tamagotchi.value?.toiletPaper = tamagotchi.value?.toiletPaper?.minus(1)!!
                     tamagotchi.value?.toilet = 100
+                    setTime(LocalDateTime.now().toString())
                 }
             }
             repo.insertTamagotchiStats(tamagotchi.value!!)
@@ -225,5 +241,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         } else {
             index = 0
         }
+    }
+
+    fun setTime(time: String) {
+        _time.value = time
     }
 }

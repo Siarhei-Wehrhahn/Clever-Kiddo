@@ -1,6 +1,5 @@
 package com.example.kiinderlernapp.ui.tamagochi
 
-import TamagotchiService
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -43,12 +42,15 @@ import com.example.kiinderlernapp.ui.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 class TamagochiFragment : Fragment() {
 
     private lateinit var binding: FragmentTamagochiBinding
     private val viewModel: MainViewModel by activityViewModels()
-    private var tamagotchiService: TamagotchiService? = null
     private var isScreenBlocked = false
 
     override fun onCreateView(
@@ -84,86 +86,115 @@ class TamagochiFragment : Fragment() {
         return binding.root
     }
 
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Log.e(TAG, "onServiceConnected aufgerufen")
-
-            if (service is TamagotchiBinder) {
-                tamagotchiService = service.getService()
-            } else {
-                Log.e(
-                    TAG,
-                    "Fehler bei der Typkonvertierung: Das übergebene IBinder ist keine Instanz von TamagotchiBinder."
-                )
-            }
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            Log.e(TAG, "onServiceDisconnected aufgerufen")
-            tamagotchiService = null
-        }
-    }
-
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val serviceIntent = Intent(requireContext(), TamagotchiService::class.java)
-        requireContext().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
-        requireContext().startService(serviceIntent)  // Service starten
 
-        binding.buttonSleep.setOnClickListener {
-            viewModel.addItem("apple")
+        if (LocalTime.now().hour >= 20 || LocalTime.now().hour <= 7) {
+            binding.sleepModus.isVisible = true
+            binding.imageTamagotchi.setImageResource(R.drawable.sleep_smiley_)
+            val window = requireActivity().window
+            val params = window.attributes
+
+            // Bildschirm blockieren
+            params.flags =
+                params.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            window.attributes = params
+
+            isScreenBlocked = true
+        } else {
+
+            val window = requireActivity().window
+            val params = window.attributes
+            params.flags =
+                params.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
+            window.attributes = params
+            isScreenBlocked = false
         }
 
-        viewModel.tamagotchi.observe(viewLifecycleOwner) { tamagotchi ->
-            lifecycleScope.launch(Dispatchers.IO) {
-                delay(1000)
-                viewModel.updateTamagotchi(tamagotchi)
-                viewModel.insertTamagotchiStats(tamagotchi)
-            }
+        binding.textHappinesPercent.text = viewModel.tamagotchi.value?.joy.toString() + "%"
+        binding.textHungryPercent.text = viewModel.tamagotchi.value?.eat.toString() + "%"
+        binding.textSleepPercent.text = viewModel.tamagotchi.value?.sleep.toString() + "%"
+        binding.textToiletPercent.text = viewModel.tamagotchi.value?.toilet.toString() + "%"
 
-            binding.textHappinesPercent.text = tamagotchi?.joy.toString() + "%"
-            binding.textHungryPercent.text = tamagotchi?.eat.toString() + "%"
-            binding.textSleepPercent.text = tamagotchi?.sleep.toString() + "%"
-            binding.textToiletPercent.text = tamagotchi?.toilet.toString() + "%"
+        viewModel.time.observe(viewLifecycleOwner) {
+            lifecycleScope.launch {
+                binding.textHappinesPercent.text = viewModel.tamagotchi.value?.joy.toString() + "%"
+                binding.textHungryPercent.text = viewModel.tamagotchi.value?.eat.toString() + "%"
+                binding.textSleepPercent.text = viewModel.tamagotchi.value?.sleep.toString() + "%"
+                binding.textToiletPercent.text = viewModel.tamagotchi.value?.toilet.toString() + "%"
 
+                delay(1000 * 60)
+                var duration = Duration.between(
+                    LocalDateTime.parse(viewModel.tamagotchi.value!!.time),
+                    LocalDateTime.now()
+                )
 
-            if (tamagotchi.apple <= 0) {
-                binding.imageApple.visibility = GONE
-            } else {
-                binding.imageApple.visibility = VISIBLE
+                // Die duration zwischen der zeit wann man sich das letzte mal abgemeldet hat bis zu dem zeitpunkt wo man sich wieder anmeldet
+                // decreaseValue läst den status des  tamagotchis sinken
+                var decreaseValue = duration.toMinutes().toInt() / 5 * 2
+
+                viewModel.tamagotchi.value?.eat =
+                    viewModel.tamagotchi.value?.eat?.minus(decreaseValue)!!
+                viewModel.tamagotchi.value?.joy =
+                    viewModel.tamagotchi.value?.joy?.minus(decreaseValue)!!
+                viewModel.tamagotchi.value?.sleep =
+                    viewModel.tamagotchi.value?.sleep?.minus(decreaseValue)!!
+                viewModel.tamagotchi.value?.toilet =
+                    viewModel.tamagotchi.value?.toilet?.minus(decreaseValue)!!
+                viewModel.setTime(LocalDateTime.now().toString())
+
+                viewModel.tamagotchi.value?.time = LocalDateTime.now().toString()
+
+                viewModel.setTime(LocalDateTime.now().toString())
+
+                viewModel.updateTamagotchi(viewModel.tamagotchi.value!!)
+                viewModel.insertTamagotchiStats(viewModel.tamagotchi.value!!)
             }
-            if (tamagotchi.broccoli <= 0) {
-                binding.imageBroccoli.visibility = GONE
-            } else {
-                binding.imageBroccoli.visibility = VISIBLE
-            }
-            if (tamagotchi.peas <= 0) {
-                binding.imagePeas.visibility = GONE
-            } else {
-                binding.imagePeas.visibility = VISIBLE
-            }
-            if (tamagotchi.strawberry <= 0) {
-                binding.imageStrawberry.visibility = GONE
-            } else {
-                binding.imageStrawberry.visibility = VISIBLE
-            }
-            if (tamagotchi.pomegrenade <= 0) {
-                binding.imagePomegrenade.visibility = GONE
-            } else {
-                binding.imagePomegrenade.visibility = VISIBLE
-            }
-            if (tamagotchi.cucumber <= 0) {
-                binding.imageCucumber.visibility = GONE
-            } else {
-                binding.imageCucumber.visibility = VISIBLE
-            }
-            if (tamagotchi.kiwi <= 0) {
-                binding.imageKiwi.visibility = GONE
-            } else {
-                binding.imageKiwi.visibility = VISIBLE
-            }
+        }
+
+        if (viewModel.tamagotchi.value?.apple!! <= 0) {
+            binding.imageApple.visibility = GONE
+        } else {
+            binding.imageApple.visibility = VISIBLE
+        }
+        if (viewModel.tamagotchi.value?.broccoli!! <= 0) {
+            binding.imageBroccoli.visibility = GONE
+        } else {
+            binding.imageBroccoli.visibility = VISIBLE
+        }
+        if (viewModel.tamagotchi.value?.peas!! <= 0) {
+            binding.imagePeas.visibility = GONE
+        } else {
+            binding.imagePeas.visibility = VISIBLE
+        }
+        if (viewModel.tamagotchi.value?.strawberry!! <= 0) {
+            binding.imageStrawberry.visibility = GONE
+        } else {
+            binding.imageStrawberry.visibility = VISIBLE
+        }
+        if (viewModel.tamagotchi.value?.pomegrenade!! <= 0) {
+            binding.imagePomegrenade.visibility = GONE
+        } else {
+            binding.imagePomegrenade.visibility = VISIBLE
+        }
+        if (viewModel.tamagotchi.value?.cucumber!! <= 0) {
+            binding.imageCucumber.visibility = GONE
+        } else {
+            binding.imageCucumber.visibility = VISIBLE
+        }
+        if (viewModel.tamagotchi.value?.kiwi!! <= 0) {
+            binding.imageKiwi.visibility = GONE
+        } else {
+            binding.imageKiwi.visibility = VISIBLE
+        }
+
+        binding.imageBack7.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.buttonSleep.setOnClickListener {
+            viewModel.tamagotchi.value?.sleep = 100
         }
 
         binding.foodButton.setOnClickListener {
@@ -250,10 +281,16 @@ class TamagochiFragment : Fragment() {
                     binding.feddingScrollV.isVisible = false
                 }
             }
-            if (viewModel.tamagotchi.value?.toilet!! > 0 && !binding.imageToiletpaper.isVisible) {
+            if (viewModel.tamagotchi.value?.toiletPaper!! > 0 && !binding.imageToiletpaper.isVisible) {
                 binding.imageToiletpaper.visibility = VISIBLE
             } else {
                 binding.imageToiletpaper.visibility = GONE
+                Toast.makeText(
+                    requireContext(),
+                    "Du hast leider kein Toilettenpapier!",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
         }
 
@@ -265,6 +302,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.toiletPaper!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -281,6 +320,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.tennisBall!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -297,6 +338,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.footBall!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -313,6 +356,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.apple!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -329,6 +374,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.broccoli!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -345,6 +392,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.peas!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -361,6 +410,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.strawberry!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -377,6 +428,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.pomegrenade!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -393,6 +446,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.cucumber!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -409,6 +464,8 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.kiwi!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
 
                 true
@@ -425,8 +482,9 @@ class TamagochiFragment : Fragment() {
 
                 if (viewModel.tamagotchi.value?.toiletPaper!! > 0) {
                     view.visibility = VISIBLE
+                } else {
+                    view.visibility = GONE
                 }
-
                 true
             } else {
                 false
@@ -541,7 +599,7 @@ class TamagochiFragment : Fragment() {
 
                                 // Hier füge deine Verzögerungslogik ein, z.B. eine Coroutine mit delay
                                 lifecycleScope.launch {
-                                    delay(10000) // Blockiere den Bildschirm für 5 Sekunden
+                                    delay(10000) // Blockiere den Bildschirm für 10 Sekunden
                                     viewModel.removeItem("toilet_paper")
                                     // Bildschirm freigeben
                                     binding.imageTamagotchi.setImageResource(R.drawable.happy)
@@ -557,10 +615,7 @@ class TamagochiFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    // Hier können Sie den Fußball wieder sichtbar machen, wenn gewünscht
-                    if (!event.result) {
-                        binding.imageFotball.visibility = View.VISIBLE
-                    }
+
                     true
                 }
 
@@ -568,12 +623,6 @@ class TamagochiFragment : Fragment() {
             }
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        requireContext().unbindService(serviceConnection)
-    }
-
 
     fun jump() {
         var jumpUp = TranslateAnimation(0f, 0f, 0f, -400f)

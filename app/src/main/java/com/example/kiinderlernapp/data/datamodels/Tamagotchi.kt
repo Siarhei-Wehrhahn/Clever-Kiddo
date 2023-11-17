@@ -3,6 +3,7 @@ package com.example.kiinderlernapp.data.datamodels
 import androidx.room.Entity
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity("tamagotchi_stats")
 data class Tamagotchi(
@@ -23,4 +24,9 @@ data class Tamagotchi(
     var kiwi: Int,
     var salat: Int,
     var toiletPaper: Int,
-)
+) {
+    lateinit var time: String
+    init {
+        time = LocalDateTime.now().toString()
+    }
+}

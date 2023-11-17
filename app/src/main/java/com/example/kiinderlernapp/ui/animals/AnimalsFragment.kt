@@ -45,6 +45,10 @@ class AnimalsFragment : Fragment() {
                 AnimalAdapter(it.shuffled(), viewModel, findNavController())
         }
 
+        binding.imageBack2.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         // Initialisieren eines PagerSnapHelpers für das RecyclerView
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(binding.recyclerView)

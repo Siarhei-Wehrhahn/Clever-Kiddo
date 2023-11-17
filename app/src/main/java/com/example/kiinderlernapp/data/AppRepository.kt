@@ -9,6 +9,8 @@ import com.example.kiinderlernapp.data.localdata.animal.AnimalDataBase
 import com.example.kiinderlernapp.data.localdata.tamagotchi.TamagotchiDataBase
 import com.example.kiinderlernapp.data.remote.CatApi
 import com.example.kiinderlernapp.data.remote.DogApi
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 
 class AppRepository(
     private val dogApi: DogApi, // Zugriff auf die Dog API
@@ -101,4 +103,6 @@ class AppRepository(
             Log.e("$log", "${e.message}")
         }
     }
+
+    //TODO decreaseValue fun schreiben
 }

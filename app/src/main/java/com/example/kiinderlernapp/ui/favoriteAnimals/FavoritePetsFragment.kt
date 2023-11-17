@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.kiinderlernapp.adapter.FavoritePetAdapter
 import com.example.kiinderlernapp.databinding.FragmentFavoritePetsBinding
 import com.example.kiinderlernapp.ui.MainViewModel
@@ -30,6 +31,10 @@ class FavoritePetsFragment : Fragment() {
 
         // ViewModel-Methode "getDatabase" aufrufen, um die Daten aus der lokalen Datenbank abzurufen
         viewmodel.getDatabase()
+
+        binding.imageBack3.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         // RecyclerView-Adapter "FavoritePetAdapter" mit den abgerufenen Daten setzen
         viewmodel.dataset.observe(viewLifecycleOwner) {

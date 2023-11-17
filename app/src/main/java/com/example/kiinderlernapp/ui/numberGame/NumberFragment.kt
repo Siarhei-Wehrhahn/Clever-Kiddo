@@ -101,6 +101,10 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
             )
         }
 
+        binding.imageBack4.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         // Antwortbuttons konfigurieren
         answerButtons.forEachIndexed { index, button ->
             button.text = randomAnswereList[index].toString()
@@ -134,8 +138,6 @@ class NumberFragment : Fragment(), TextToSpeech.OnInitListener {
                 }
             }
         }
-
-        // TODO: Möglicherweise einen Shop implementieren, um mit Ingame-Währung einzukaufen, die durch Erfolge gewonnen wird
     }
 
     override fun onInit(status: Int) {

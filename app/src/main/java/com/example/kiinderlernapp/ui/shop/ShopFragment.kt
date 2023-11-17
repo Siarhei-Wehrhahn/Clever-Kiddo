@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.adapter.ShopAdapter
 import com.example.kiinderlernapp.data.datamodels.ShopItem
@@ -46,6 +47,10 @@ class ShopFragment : Fragment() {
 
         binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
             adapter.update(getList())
+        }
+
+        binding.imageBack6.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         viewModel.score.observe(viewLifecycleOwner) {
