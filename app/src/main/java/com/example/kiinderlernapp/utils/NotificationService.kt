@@ -54,10 +54,10 @@ class NotificationService(
         val notificationManager = NotificationManagerCompat.from(this)
         if (ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.POST_NOTIFICATIONS
+                Manifest.permission.RECEIVE_BOOT_COMPLETED
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 9000)
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.RECEIVE_BOOT_COMPLETED), 9000)
             return
         }
         notificationManager.notify(notificationId, notification)
