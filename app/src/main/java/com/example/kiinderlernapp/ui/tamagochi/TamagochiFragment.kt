@@ -90,7 +90,8 @@ class TamagochiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (LocalTime.now().hour >= 20 || LocalTime.now().hour <= 7) {
+        if (LocalTime.now().hour >= 20 || LocalTime.now().hour <= 8) {
+            viewModel.tamagotchi.value!!.isSleeping = true
             binding.sleepModus.isVisible = true
             binding.imageTamagotchi.setImageResource(R.drawable.sleep_smiley_)
             val window = requireActivity().window
@@ -102,15 +103,33 @@ class TamagochiFragment : Fragment() {
             window.attributes = params
 
             isScreenBlocked = true
-        } else {
+        } else if (viewModel.tamagotchi.value!!.isSleeping) {
 
+            // TODO zeit läuft nicht runter beim schliesen irgendwie muss die zeit weiterlaufen damit das tamagotchi aufwachen kann
+            binding.sleepModus.isVisible = true
+            binding.imageTamagotchi.setImageResource(R.drawable.sleep_smiley_)
+            binding.buttonSleep.visibility = GONE
+            binding.buttonToilet.visibility = GONE
+            binding.buttonPlay.visibility = GONE
+            binding.foodButton.visibility = GONE
+        } else {
+            viewModel.tamagotchi.value!!.isSleeping = false
             val window = requireActivity().window
             val params = window.attributes
             params.flags =
                 params.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
             window.attributes = params
+            binding.imageTamagotchi.setImageResource(R.drawable.happy)
+
+            binding.buttonSleep.visibility = VISIBLE
+            binding.buttonToilet.visibility = VISIBLE
+            binding.buttonPlay.visibility = VISIBLE
+            binding.foodButton.visibility = VISIBLE
+
             isScreenBlocked = false
         }
+
+        if (LocalTime.now().hour == 8) viewModel.tamagotchi.value?.sleep = 100
 
         binding.textHappinesPercent.text = viewModel.tamagotchi.value?.joy.toString() + "%"
         binding.textHungryPercent.text = viewModel.tamagotchi.value?.eat.toString() + "%"
@@ -124,27 +143,43 @@ class TamagochiFragment : Fragment() {
                 binding.textSleepPercent.text = viewModel.tamagotchi.value?.sleep.toString() + "%"
                 binding.textToiletPercent.text = viewModel.tamagotchi.value?.toilet.toString() + "%"
 
-                delay(1000 * 60)
+                delay(1000)
                 var duration = Duration.between(
                     LocalDateTime.parse(viewModel.tamagotchi.value!!.time),
                     LocalDateTime.now()
                 )
 
-                // Die duration zwischen der zeit wann man sich das letzte mal abgemeldet hat bis zu dem zeitpunkt wo man sich wieder anmeldet
-                // decreaseValue läst den status des  tamagotchis sinken
-                var decreaseValue = duration.toMinutes().toInt() / 5 * 2
+                if (LocalDateTime.now().isAfter(
+                        LocalDateTime.parse(viewModel.tamagotchi.value!!.time).plusMinutes(2)
+                    )
+                ) {
+                    // Die duration zwischen der zeit wann man sich das letzte mal abgemeldet hat bis zu dem zeitpunkt wo man sich wieder anmeldet
+                    // decreaseValue läst den status des  tamagotchis sinken
+                    var decreaseValue = if (viewModel.tamagotchi.value!!.isSleeping) duration.toMinutes()
+                        .toInt() / 5 * 2 / 2 else duration.toMinutes().toInt() / 5 * 2
 
-                viewModel.tamagotchi.value?.eat =
-                    viewModel.tamagotchi.value?.eat?.minus(decreaseValue)!!
-                viewModel.tamagotchi.value?.joy =
-                    viewModel.tamagotchi.value?.joy?.minus(decreaseValue)!!
-                viewModel.tamagotchi.value?.sleep =
-                    viewModel.tamagotchi.value?.sleep?.minus(decreaseValue)!!
-                viewModel.tamagotchi.value?.toilet =
-                    viewModel.tamagotchi.value?.toilet?.minus(decreaseValue)!!
-                viewModel.setTime(LocalDateTime.now().toString())
+                    viewModel.tamagotchi.value?.eat =
+                        if (viewModel.tamagotchi.value!!.eat > 2) viewModel.tamagotchi.value?.eat?.minus(
+                            decreaseValue
+                        )!! else 0
 
-                viewModel.tamagotchi.value?.time = LocalDateTime.now().toString()
+                    viewModel.tamagotchi.value?.joy =
+                        if (viewModel.tamagotchi.value!!.joy > 2) viewModel.tamagotchi.value?.joy?.minus(
+                            decreaseValue
+                        )!! else 0
+
+                    viewModel.tamagotchi.value?.sleep =
+                        if (viewModel.tamagotchi.value!!.sleep > 0) viewModel.tamagotchi.value?.sleep?.minus(
+                            duration.toMinutes().toInt() / 36 * 5
+                        )!! else 0
+
+                    viewModel.tamagotchi.value?.toilet =
+                        if (viewModel.tamagotchi.value!!.toilet > 0) viewModel.tamagotchi.value?.toilet?.minus(
+                            decreaseValue
+                        )!! else 0
+
+                    viewModel.tamagotchi.value?.time = LocalDateTime.now().toString()
+                }
 
                 viewModel.setTime(LocalDateTime.now().toString())
 
@@ -153,48 +188,17 @@ class TamagochiFragment : Fragment() {
             }
         }
 
-        if (viewModel.tamagotchi.value?.apple!! <= 0) {
-            binding.imageApple.visibility = GONE
-        } else {
-            binding.imageApple.visibility = VISIBLE
-        }
-        if (viewModel.tamagotchi.value?.broccoli!! <= 0) {
-            binding.imageBroccoli.visibility = GONE
-        } else {
-            binding.imageBroccoli.visibility = VISIBLE
-        }
-        if (viewModel.tamagotchi.value?.peas!! <= 0) {
-            binding.imagePeas.visibility = GONE
-        } else {
-            binding.imagePeas.visibility = VISIBLE
-        }
-        if (viewModel.tamagotchi.value?.strawberry!! <= 0) {
-            binding.imageStrawberry.visibility = GONE
-        } else {
-            binding.imageStrawberry.visibility = VISIBLE
-        }
-        if (viewModel.tamagotchi.value?.pomegrenade!! <= 0) {
-            binding.imagePomegrenade.visibility = GONE
-        } else {
-            binding.imagePomegrenade.visibility = VISIBLE
-        }
-        if (viewModel.tamagotchi.value?.cucumber!! <= 0) {
-            binding.imageCucumber.visibility = GONE
-        } else {
-            binding.imageCucumber.visibility = VISIBLE
-        }
-        if (viewModel.tamagotchi.value?.kiwi!! <= 0) {
-            binding.imageKiwi.visibility = GONE
-        } else {
-            binding.imageKiwi.visibility = VISIBLE
-        }
+        // Observer triggern
+        viewModel.setTime(
+            LocalDateTime.parse(viewModel.tamagotchi.value!!.time).plusSeconds(1).toString()
+        )
 
         binding.imageBack7.setOnClickListener {
             findNavController().popBackStack()
         }
 
         binding.buttonSleep.setOnClickListener {
-            viewModel.tamagotchi.value?.sleep = 100
+            powerNap()
         }
 
         binding.foodButton.setOnClickListener {
@@ -202,6 +206,42 @@ class TamagochiFragment : Fragment() {
             val tamagotchi = viewModel.tamagotchi.value
             binding.imageFotball.isVisible = false
             binding.imageTennisball.isVisible = false
+
+            if (viewModel.tamagotchi.value?.apple!! <= 0) {
+                binding.imageApple.visibility = GONE
+            } else {
+                binding.imageApple.visibility = VISIBLE
+            }
+            if (viewModel.tamagotchi.value?.broccoli!! <= 0) {
+                binding.imageBroccoli.visibility = GONE
+            } else {
+                binding.imageBroccoli.visibility = VISIBLE
+            }
+            if (viewModel.tamagotchi.value?.peas!! <= 0) {
+                binding.imagePeas.visibility = GONE
+            } else {
+                binding.imagePeas.visibility = VISIBLE
+            }
+            if (viewModel.tamagotchi.value?.strawberry!! <= 0) {
+                binding.imageStrawberry.visibility = GONE
+            } else {
+                binding.imageStrawberry.visibility = VISIBLE
+            }
+            if (viewModel.tamagotchi.value?.pomegrenade!! <= 0) {
+                binding.imagePomegrenade.visibility = GONE
+            } else {
+                binding.imagePomegrenade.visibility = VISIBLE
+            }
+            if (viewModel.tamagotchi.value?.cucumber!! <= 0) {
+                binding.imageCucumber.visibility = GONE
+            } else {
+                binding.imageCucumber.visibility = VISIBLE
+            }
+            if (viewModel.tamagotchi.value?.kiwi!! <= 0) {
+                binding.imageKiwi.visibility = GONE
+            } else {
+                binding.imageKiwi.visibility = VISIBLE
+            }
 
             if (tamagotchi?.apple != 0 ||
                 tamagotchi?.broccoli != 0 ||
@@ -318,7 +358,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.tennisBall!! > 0) {
+                if (viewModel.tamagotchi.value?.tennisBall!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -336,7 +376,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.footBall!! > 0) {
+                if (viewModel.tamagotchi.value?.footBall!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -354,7 +394,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.apple!! > 0) {
+                if (viewModel.tamagotchi.value?.apple!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -372,7 +412,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.broccoli!! > 0) {
+                if (viewModel.tamagotchi.value?.broccoli!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -390,7 +430,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.peas!! > 0) {
+                if (viewModel.tamagotchi.value?.peas!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -408,7 +448,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.strawberry!! > 0) {
+                if (viewModel.tamagotchi.value?.strawberry!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -426,7 +466,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.pomegrenade!! > 0) {
+                if (viewModel.tamagotchi.value?.pomegrenade!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -444,7 +484,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.cucumber!! > 0) {
+                if (viewModel.tamagotchi.value?.cucumber!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -462,7 +502,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.kiwi!! > 0) {
+                if (viewModel.tamagotchi.value?.kiwi!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -480,7 +520,7 @@ class TamagochiFragment : Fragment() {
                 val dragShadowBuilder = DragShadowBuilder(view)
                 view.startDragAndDrop(clipData, dragShadowBuilder, view, 0)
 
-                if (viewModel.tamagotchi.value?.toiletPaper!! > 0) {
+                if (viewModel.tamagotchi.value?.toiletPaper!! > 1) {
                     view.visibility = VISIBLE
                 } else {
                     view.visibility = GONE
@@ -661,5 +701,35 @@ class TamagochiFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         requireActivity().onBackPressedDispatcher.onBackPressed()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Observer triggern
+        viewModel.setTime(
+            LocalDateTime.parse(viewModel.tamagotchi.value!!.time).plusSeconds(1).toString()
+        )
+    }
+
+    private fun powerNap() {
+        viewModel.tamagotchi.value?.isSleeping = true
+        binding.sleepModus.isVisible = true
+        binding.imageTamagotchi.setImageResource(R.drawable.sleep_smiley_)
+        binding.buttonSleep.visibility = GONE
+        binding.buttonToilet.visibility = GONE
+        binding.buttonPlay.visibility = GONE
+        binding.foodButton.visibility = GONE
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            delay(5000)
+            viewModel.tamagotchi.value!!.isSleeping = false
+            binding.buttonSleep.visibility = VISIBLE
+            binding.buttonToilet.visibility = VISIBLE
+            binding.buttonPlay.visibility = VISIBLE
+            binding.foodButton.visibility = VISIBLE
+
+            viewModel.tamagotchi.value!!.sleep += 10
+            binding.imageTamagotchi.setImageResource(R.drawable.happy)
+        }
     }
 }

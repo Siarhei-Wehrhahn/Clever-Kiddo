@@ -60,7 +60,7 @@ object Questions {
             ),
 
             Quiz(
-                question = "Berühre die Tomate!",
+                question = "Wähle die Tomate!",
                 pics.filter { it != R.drawable.tomate }.random(),
                 pics.filter { it != R.drawable.tomate }.random(),
                 pics.filter { it != R.drawable.tomate }.random(),
@@ -78,7 +78,7 @@ object Questions {
             ),
 
             Quiz(
-                question = "Berühre die Erbsen!",
+                question = "Tippe die Erbsen!",
                 pics.filter { it != R.drawable.erbsen }.random(),
                 R.drawable.erbsen,
                 pics.filter { it != R.drawable.erbsen }.random(),
@@ -123,7 +123,7 @@ object Questions {
             ),
 
             Quiz(
-                question = "Berühre die Weintrauben!",
+                question = "Drücke die Weintrauben!",
                 R.drawable.weintrauben,
                 pics.filter { it != R.drawable.weintrauben }.random(),
                 pics.filter { it != R.drawable.weintrauben }.random(),
@@ -150,7 +150,7 @@ object Questions {
             ),
 
             Quiz(
-                question = "Tippe auf die Blumenkohl!",
+                question = "Drücke auf die Blumenkohl!",
                 R.drawable.blumenkohl,
                 pics.filter { it != R.drawable.blumenkohl }.random(),
                 pics.filter { it != R.drawable.blumenkohl }.random(),

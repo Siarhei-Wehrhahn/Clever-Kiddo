@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.kiinderlernapp.databinding.FragmentQuizBinding
 import com.example.kiinderlernapp.ui.MainViewModel
 import kotlinx.coroutines.delay
@@ -42,6 +43,10 @@ class QuizFragment : Fragment(),TextToSpeech.OnInitListener {
         setText()
         viewModel.quiz.observe(viewLifecycleOwner) {
             setText()
+        }
+
+        binding.imageViewBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

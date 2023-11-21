@@ -63,7 +63,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 "apple" -> tamagotchi.value?.apple = tamagotchi.value?.apple?.plus(1)!!
 
-                "broccoli" -> tamagotchi.value?.apple = tamagotchi.value?.broccoli?.plus(1)!!
+                "broccoli" -> tamagotchi.value?.broccoli = tamagotchi.value?.broccoli?.plus(1)!!
 
                 "peas" -> tamagotchi.value?.peas = tamagotchi.value?.peas?.plus(1)!!
 

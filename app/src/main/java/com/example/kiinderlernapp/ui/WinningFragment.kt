@@ -45,7 +45,7 @@ class WinningFragment : Fragment() {
 
         // Eine Verzögerung von 3 Sekunden, bevor zur vorherigen Ansicht zurücknavigiert wird
         lifecycleScope.launch {
-            delay(3000)
+            delay(2000)
             findNavController().popBackStack()
         }
     }

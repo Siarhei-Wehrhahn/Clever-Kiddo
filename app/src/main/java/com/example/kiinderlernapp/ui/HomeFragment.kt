@@ -12,6 +12,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.databinding.FragmentHomeBinding
+import java.text.NumberFormat
+import java.util.Locale
 
 class HomeFragment : Fragment() {
 
@@ -57,7 +59,8 @@ class HomeFragment : Fragment() {
         binding.textScore.text = viewModel.score.value.toString()
 
         viewModel.score.observe(viewLifecycleOwner) {
-            binding.textScore.text = viewModel.score.value.toString()
+            val formattedScore = NumberFormat.getNumberInstance(Locale.getDefault()).format(viewModel.score.value)
+            binding.textScore.text = formattedScore
         }
 
         // Die folgenden Abschnitte sind Klick-Handler für die verschiedenen Optionen im HomeFragment.

@@ -24,6 +24,7 @@ data class Tamagotchi(
     var kiwi: Int,
     var salat: Int,
     var toiletPaper: Int,
+    var isSleeping: Boolean = false
 ) {
     lateinit var time: String
     init {

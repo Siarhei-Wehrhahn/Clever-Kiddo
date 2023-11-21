@@ -20,6 +20,8 @@ import com.example.kiinderlernapp.ui.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 class ShopFragment : Fragment() {
 
@@ -54,7 +56,8 @@ class ShopFragment : Fragment() {
         }
 
         viewModel.score.observe(viewLifecycleOwner) {
-            binding.textStarCount.text = viewModel.score.value.toString()
+            val formattedScore = NumberFormat.getNumberInstance(Locale.getDefault()).format(viewModel.score.value)
+            binding.textStarCount.text = formattedScore
         }
 
         binding.recShop.adapter = adapter

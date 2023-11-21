@@ -91,4 +91,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textQuestion3" />
 
+    <ImageView
+        android:id="@+id/imageViewBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_white"
+        app:layout_constraintBottom_toBottomOf="@+id/textQuestion3"
+        app:layout_constraintEnd_toStartOf="@+id/textQuestion3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textQuestion3" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
