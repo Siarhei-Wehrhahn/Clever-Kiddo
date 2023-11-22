@@ -103,15 +103,6 @@ class TamagochiFragment : Fragment() {
             window.attributes = params
 
             isScreenBlocked = true
-        } else if (viewModel.tamagotchi.value!!.isSleeping) {
-
-            // TODO zeit läuft nicht runter beim schliesen irgendwie muss die zeit weiterlaufen damit das tamagotchi aufwachen kann
-            binding.sleepModus.isVisible = true
-            binding.imageTamagotchi.setImageResource(R.drawable.sleep_smiley_)
-            binding.buttonSleep.visibility = GONE
-            binding.buttonToilet.visibility = GONE
-            binding.buttonPlay.visibility = GONE
-            binding.foodButton.visibility = GONE
         } else {
             viewModel.tamagotchi.value!!.isSleeping = false
             val window = requireActivity().window
@@ -155,26 +146,27 @@ class TamagochiFragment : Fragment() {
                 ) {
                     // Die duration zwischen der zeit wann man sich das letzte mal abgemeldet hat bis zu dem zeitpunkt wo man sich wieder anmeldet
                     // decreaseValue läst den status des  tamagotchis sinken
-                    var decreaseValue = if (viewModel.tamagotchi.value!!.isSleeping) duration.toMinutes()
-                        .toInt() / 5 * 2 / 2 else duration.toMinutes().toInt() / 5 * 2
+                    var decreaseValue =
+                        if (viewModel.tamagotchi.value!!.isSleeping) duration.toMinutes()
+                            .toInt() / 5 * 2 / 2 else duration.toMinutes().toInt() / 5 * 2
 
                     viewModel.tamagotchi.value?.eat =
-                        if (viewModel.tamagotchi.value!!.eat > 2) viewModel.tamagotchi.value?.eat?.minus(
+                        if (viewModel.tamagotchi.value!!.eat >= 2) viewModel.tamagotchi.value?.eat?.minus(
                             decreaseValue
                         )!! else 0
 
                     viewModel.tamagotchi.value?.joy =
-                        if (viewModel.tamagotchi.value!!.joy > 2) viewModel.tamagotchi.value?.joy?.minus(
+                        if (viewModel.tamagotchi.value!!.joy >= 2) viewModel.tamagotchi.value?.joy?.minus(
                             decreaseValue
                         )!! else 0
 
                     viewModel.tamagotchi.value?.sleep =
-                        if (viewModel.tamagotchi.value!!.sleep > 0) viewModel.tamagotchi.value?.sleep?.minus(
+                        if (viewModel.tamagotchi.value!!.sleep >= 5) viewModel.tamagotchi.value?.sleep?.minus(
                             duration.toMinutes().toInt() / 36 * 5
                         )!! else 0
 
                     viewModel.tamagotchi.value?.toilet =
-                        if (viewModel.tamagotchi.value!!.toilet > 0) viewModel.tamagotchi.value?.toilet?.minus(
+                        if (viewModel.tamagotchi.value!!.toilet >= 2) viewModel.tamagotchi.value?.toilet?.minus(
                             decreaseValue
                         )!! else 0
 
@@ -185,6 +177,14 @@ class TamagochiFragment : Fragment() {
 
                 viewModel.updateTamagotchi(viewModel.tamagotchi.value!!)
                 viewModel.insertTamagotchiStats(viewModel.tamagotchi.value!!)
+            }
+        }
+
+        viewModel.tamagotchi.observe(viewLifecycleOwner) {
+            if (viewModel.tamagotchi.value!!.toilet <= 0) {
+                binding.imageShit.visibility = VISIBLE
+            } else {
+                binding.imageShit.visibility = GONE
             }
         }
 
@@ -323,8 +323,9 @@ class TamagochiFragment : Fragment() {
             }
             if (viewModel.tamagotchi.value?.toiletPaper!! > 0 && !binding.imageToiletpaper.isVisible) {
                 binding.imageToiletpaper.visibility = VISIBLE
-            } else {
+            } else if (viewModel.tamagotchi.value?.toiletPaper!! > 0 && binding.imageToiletpaper.isVisible) {
                 binding.imageToiletpaper.visibility = GONE
+            } else if (viewModel.tamagotchi.value?.toiletPaper!! <= 0) {
                 Toast.makeText(
                     requireContext(),
                     "Du hast leider kein Toilettenpapier!",
@@ -720,8 +721,9 @@ class TamagochiFragment : Fragment() {
         binding.buttonPlay.visibility = GONE
         binding.foodButton.visibility = GONE
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             delay(5000)
+            binding.sleepModus.isVisible = false
             viewModel.tamagotchi.value!!.isSleeping = false
             binding.buttonSleep.visibility = VISIBLE
             binding.buttonToilet.visibility = VISIBLE
