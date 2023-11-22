@@ -160,4 +160,44 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="@+id/imageView6" />
 
+    <Button
+        android:id="@+id/buttonTamagotchi"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/teal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonShop"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/teal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonTamagotchi" />
+
+    <ImageView
+        android:id="@+id/imageButtonTamagotchi"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/confused"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonTamagotchi"
+        app:layout_constraintEnd_toEndOf="@+id/buttonTamagotchi"
+        app:layout_constraintStart_toStartOf="@+id/buttonTamagotchi"
+        app:layout_constraintTop_toTopOf="@+id/buttonTamagotchi" />
+
+    <ImageView
+        android:id="@+id/imageShoppingCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_shopping_cart_24"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonShop"
+        app:layout_constraintEnd_toEndOf="@+id/buttonShop"
+        app:layout_constraintStart_toStartOf="@+id/buttonShop"
+        app:layout_constraintTop_toTopOf="@+id/buttonShop" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

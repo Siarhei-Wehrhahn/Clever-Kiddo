@@ -186,6 +186,29 @@ class TamagochiFragment : Fragment() {
             } else {
                 binding.imageShit.visibility = GONE
             }
+
+            var joy = viewModel.tamagotchi.value!!.joy
+            var toilet = viewModel.tamagotchi.value!!.toilet
+            var eat = viewModel.tamagotchi.value!!.eat
+            var sleep = viewModel.tamagotchi.value!!.sleep
+
+            if (joy < (50..65).random() && toilet > 15 && eat > 30 && sleep > 20) {
+                binding.imageTamagotchi.setImageResource(R.drawable.neutral)
+            } else if (joy < (30..40).random() && toilet > 15 && eat > 30 && sleep > 20) {
+                binding.imageTamagotchi.setImageResource(R.drawable.angry)
+            }
+
+            if (eat < (15..30).random() && toilet > 15 && joy > 30 && sleep > 20) {
+                binding.imageTamagotchi.setImageResource(R.drawable.shoked)
+            }
+
+            if (joy < 20 && toilet < 15 && eat < 30 && sleep < 20) {
+                binding.imageTamagotchi.setImageResource(R.drawable.angryred)
+            }
+
+            if (sleep < 20 && toilet > 15 && eat > 30 && joy > 20) {
+                binding.imageTamagotchi.setImageResource(R.drawable.neutral)
+            }
         }
 
         // Observer triggern

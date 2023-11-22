@@ -63,6 +63,23 @@ class HomeFragment : Fragment() {
             binding.textScore.text = formattedScore
         }
 
+        viewModel.tamagotchi.observe(viewLifecycleOwner) {
+            if (viewModel.tamagotchi.value!!.toilet <= 60 ||
+                viewModel.tamagotchi.value!!.joy <= 60 ||
+                viewModel.tamagotchi.value!!.sleep <= 60 ||
+                viewModel.tamagotchi.value!!.eat <= 60
+                ) {
+                binding.imageButtonTamagotchi.setImageResource(R.drawable.neutral)
+            } else if (viewModel.tamagotchi.value!!.toilet <= 35 ||
+                viewModel.tamagotchi.value!!.joy <= 35 ||
+                viewModel.tamagotchi.value!!.sleep <= 35 ||
+                viewModel.tamagotchi.value!!.eat <= 35) {
+                binding.imageButtonTamagotchi.setImageResource(R.drawable.angryred)
+            } else {
+                binding.imageButtonTamagotchi.setImageResource(R.drawable.happy)
+            }
+        }
+
         // Die folgenden Abschnitte sind Klick-Handler für die verschiedenen Optionen im HomeFragment.
         binding.colorGame.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_colorFragment)
@@ -84,11 +101,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_vegetableFragment)
         }
 
-        binding.tamagotchi.setOnClickListener {
+        binding.buttonTamagotchi.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_tamagochiFragment)
         }
 
-        binding.shop.setOnClickListener {
+        binding.buttonShop.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_shopFragment)
         }
     }
