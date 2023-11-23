@@ -4,21 +4,13 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ClipData
-import android.content.ComponentName
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.DragShadowBuilder
 import android.view.View.GONE
-import android.view.View.VIEW_LOG_TAG
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -29,17 +21,14 @@ import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.kiinderlernapp.R
-import com.example.kiinderlernapp.data.datamodels.Tamagotchi
 import com.example.kiinderlernapp.databinding.FragmentTamagochiBinding
 import com.example.kiinderlernapp.ui.MainViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -82,9 +71,10 @@ class TamagochiFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
         return binding.root
     }
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,8 +110,6 @@ class TamagochiFragment : Fragment() {
             isScreenBlocked = false
         }
 
-        if (LocalTime.now().hour == 8) viewModel.tamagotchi.value?.sleep = 100
-
         binding.textHappinesPercent.text = viewModel.tamagotchi.value?.joy.toString() + "%"
         binding.textHungryPercent.text = viewModel.tamagotchi.value?.eat.toString() + "%"
         binding.textSleepPercent.text = viewModel.tamagotchi.value?.sleep.toString() + "%"
@@ -150,24 +138,21 @@ class TamagochiFragment : Fragment() {
                         if (viewModel.tamagotchi.value!!.isSleeping) duration.toMinutes()
                             .toInt() / 5 * 2 / 2 else duration.toMinutes().toInt() / 5 * 2
 
+
+
                     viewModel.tamagotchi.value?.eat =
-                        if (viewModel.tamagotchi.value!!.eat >= 2) viewModel.tamagotchi.value?.eat?.minus(
+                        if (viewModel.tamagotchi.value!!.eat >= decreaseValue) viewModel.tamagotchi.value?.eat?.minus(
                             decreaseValue
                         )!! else 0
 
                     viewModel.tamagotchi.value?.joy =
-                        if (viewModel.tamagotchi.value!!.joy >= 2) viewModel.tamagotchi.value?.joy?.minus(
+                        if (viewModel.tamagotchi.value!!.joy >= decreaseValue) viewModel.tamagotchi.value?.joy?.minus(
                             decreaseValue
                         )!! else 0
 
                     viewModel.tamagotchi.value?.sleep =
                         if (viewModel.tamagotchi.value!!.sleep >= 5) viewModel.tamagotchi.value?.sleep?.minus(
                             duration.toMinutes().toInt() / 36 * 5
-                        )!! else 0
-
-                    viewModel.tamagotchi.value?.toilet =
-                        if (viewModel.tamagotchi.value!!.toilet >= 2) viewModel.tamagotchi.value?.toilet?.minus(
-                            decreaseValue
                         )!! else 0
 
                     viewModel.tamagotchi.value?.time = LocalDateTime.now().toString()
@@ -179,6 +164,26 @@ class TamagochiFragment : Fragment() {
                 viewModel.insertTamagotchiStats(viewModel.tamagotchi.value!!)
             }
         }
+
+        viewModel.tamagotchi?.value?.let { tamagotchi ->
+            // Überprüfen, ob bereits Werte für den heutigen Tag gesetzt wurden
+            val today = LocalDate.now()
+
+            if (tamagotchi.lastLoginDate == null || tamagotchi.lastLoginDate != today.toString()) {
+                var duration = Duration.between(
+                    LocalDateTime.now().withHour(8),
+                    LocalDateTime.now()
+                )
+
+                tamagotchi.sleep = 100 - duration.toMinutes().toInt() / 36 * 5
+
+                // Setze das Datum des letzten Logins auf den aktuellen Tag
+                setLastLoginDate(today.toString())
+            }
+        }
+
+        if (LocalTime.now().hour >= 8 && viewModel.tamagotchi.value!!.sleep <= 30) viewModel.tamagotchi.value?.sleep =
+            100
 
         viewModel.tamagotchi.observe(viewLifecycleOwner) {
             if (viewModel.tamagotchi.value!!.toilet <= 0) {
@@ -209,6 +214,9 @@ class TamagochiFragment : Fragment() {
             if (sleep < 20 && toilet > 15 && eat > 30 && joy > 20) {
                 binding.imageTamagotchi.setImageResource(R.drawable.neutral)
             }
+            if (toilet < (20..45).random()) {
+                binding.imageTamagotchi.setImageResource(R.drawable.gringing2)
+            }
         }
 
         // Observer triggern
@@ -217,7 +225,7 @@ class TamagochiFragment : Fragment() {
         )
 
         binding.imageBack7.setOnClickListener {
-            findNavController().popBackStack()
+            fragmentManager?.popBackStackImmediate()
         }
 
         binding.buttonSleep.setOnClickListener {
@@ -582,67 +590,115 @@ class TamagochiFragment : Fragment() {
                         }
 
                         "apple" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 95) {
+                            if (viewModel.tamagotchi.value?.eat!! < 95 && viewModel.tamagotchi.value!!.toilet >= 5) {
                                 viewModel.removeItem("apple")
                                 binding.imageTamagotchi.setImageResource(R.drawable.grinning)
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
                         "broccoli" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90) {
+                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
                                 viewModel.removeItem("broccoli")
                                 binding.imageTamagotchi.setImageResource(R.drawable.alien)
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
                         "peas" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90) {
+                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
                                 viewModel.removeItem("peas")
                                 binding.imageTamagotchi.setImageResource(R.drawable.gringing2)
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
                         "strawberry" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 95) {
+                            if (viewModel.tamagotchi.value?.eat!! < 95 && viewModel.tamagotchi.value!!.toilet >= 5) {
                                 viewModel.removeItem("strawberry")
                                 binding.imageTamagotchi.setImageResource(R.drawable.grinning)
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
                         "pomegrenade" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 80) {
+                            if (viewModel.tamagotchi.value?.eat!! < 80 && viewModel.tamagotchi.value!!.toilet >= 10) {
                                 viewModel.removeItem("pomegrenade")
                                 binding.imageTamagotchi.setImageResource(R.drawable.grinning)
                                 jump()
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
                         "cucumber" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90) {
+                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
                                 viewModel.removeItem("cucumber")
                                 binding.imageTamagotchi.setImageResource(R.drawable.gringing2)
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
                         "kiwi" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 95) {
+                            if (viewModel.tamagotchi.value?.eat!! < 95 && viewModel.tamagotchi.value!!.toilet >= 5) {
                                 viewModel.removeItem("kiwi")
                                 binding.imageTamagotchi.setImageResource(R.drawable.grinning)
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
                         "salat" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90) {
+                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
                                 viewModel.removeItem("salat")
                                 binding.imageTamagotchi.setImageResource(R.drawable.grinning)
                                 smallDelayToNormal()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Du musst zuerst die Toilette besuchen!",
+                                    Toast.LENGTH_SHORT
+                                )
                             }
                         }
 
@@ -651,6 +707,7 @@ class TamagochiFragment : Fragment() {
                                 binding.imageToiletpaper.visibility = GONE
 
                                 binding.imageTamagotchi.setImageResource(R.drawable.nerdy_grinnging)
+
                                 val window = requireActivity().window
                                 val params = window.attributes
 
@@ -677,6 +734,7 @@ class TamagochiFragment : Fragment() {
                     }
                     true
                 }
+
 
                 DragEvent.ACTION_DRAG_ENDED -> {
 
@@ -756,5 +814,9 @@ class TamagochiFragment : Fragment() {
             viewModel.tamagotchi.value!!.sleep += 10
             binding.imageTamagotchi.setImageResource(R.drawable.happy)
         }
+    }
+
+    private fun setLastLoginDate(date: String) {
+        viewModel.tamagotchi.value!!.lastLoginDate = date
     }
 }

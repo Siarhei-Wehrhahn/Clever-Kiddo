@@ -9,9 +9,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.kiinderlernapp.R
 import com.example.kiinderlernapp.databinding.FragmentHomeBinding
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -64,16 +66,16 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.tamagotchi.observe(viewLifecycleOwner) {
-            if (viewModel.tamagotchi.value!!.toilet <= 60 ||
-                viewModel.tamagotchi.value!!.joy <= 60 ||
-                viewModel.tamagotchi.value!!.sleep <= 60 ||
-                viewModel.tamagotchi.value!!.eat <= 60
+            if (it.toilet <= 60 ||
+                it.joy <= 60 ||
+                it.sleep <= 60 ||
+                it.eat <= 60
                 ) {
                 binding.imageButtonTamagotchi.setImageResource(R.drawable.neutral)
-            } else if (viewModel.tamagotchi.value!!.toilet <= 35 ||
-                viewModel.tamagotchi.value!!.joy <= 35 ||
-                viewModel.tamagotchi.value!!.sleep <= 35 ||
-                viewModel.tamagotchi.value!!.eat <= 35) {
+            } else if (it.toilet <= 35 ||
+                it.joy <= 35 ||
+                it.sleep <= 35 ||
+                it.eat <= 35) {
                 binding.imageButtonTamagotchi.setImageResource(R.drawable.angryred)
             } else {
                 binding.imageButtonTamagotchi.setImageResource(R.drawable.happy)
@@ -102,7 +104,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.buttonTamagotchi.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_tamagochiFragment)
+            findNavController().navigate(R.id.tamagochiFragment)
         }
 
         binding.buttonShop.setOnClickListener {

@@ -25,11 +25,11 @@ import java.time.LocalDateTime
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _time = MutableLiveData<String>()
-    val time : LiveData<String>
+    val time: LiveData<String>
         get() = _time
 
     val _score = MutableLiveData(0)
-    val score : LiveData<Int>
+    val score: LiveData<Int>
         get() = _score
 
     // Funktion zum Hinzufügen von Punkten (Sterne)
@@ -41,9 +41,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _score.value = _score.value?.minus(stars)
     }
 
+    fun addGift() {
+        _score.value = _score.value?.plus(100)
+        addItem("tennisball")
+        addItem("football")
+        addItem("apple")
+        addItem("broccoli")
+        addItem("peas")
+        addItem("strawberry")
+        addItem("pomegrenade")
+        addItem("cucumber")
+        addItem("kiwi")
+        addItem("salat")
+        addItem("toilet_paper")
+    }
+
     private var index = 0
 
-    private val repo = AppRepository(DogApi, CatApi, AnimalDataBase.getDatabase(application), TamagotchiDataBase.getDatabase(application))
+    private val repo = AppRepository(
+        DogApi,
+        CatApi,
+        AnimalDataBase.getDatabase(application),
+        TamagotchiDataBase.getDatabase(application)
+    )
 
     private var _textToSpeach = MutableLiveData<String>()
     val textToSpeach: LiveData<String>
@@ -56,8 +76,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun addItem(item: String) {
         Log.e("Viewmodel", tamagotchi.value.toString())
         viewModelScope.launch {
-            when(item) {
-                "tennisball" -> tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.plus(1)!!
+            when (item) {
+                "tennisball" -> tamagotchi.value?.tennisBall =
+                    tamagotchi.value?.tennisBall?.plus(1)!!
 
                 "football" -> tamagotchi.value?.footBall = tamagotchi.value?.footBall?.plus(1)!!
 
@@ -67,9 +88,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 "peas" -> tamagotchi.value?.peas = tamagotchi.value?.peas?.plus(1)!!
 
-                "strawberry" -> tamagotchi.value?.strawberry = tamagotchi.value?.strawberry?.plus(1)!!
+                "strawberry" -> tamagotchi.value?.strawberry =
+                    tamagotchi.value?.strawberry?.plus(1)!!
 
-                "pomegrenade" -> tamagotchi.value?.pomegrenade = tamagotchi.value?.pomegrenade?.plus(1)!!
+                "pomegrenade" -> tamagotchi.value?.pomegrenade =
+                    tamagotchi.value?.pomegrenade?.plus(1)!!
 
                 "cucumber" -> tamagotchi.value?.cucumber = tamagotchi.value?.cucumber?.plus(1)!!
 
@@ -77,7 +100,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                 "salat" -> tamagotchi.value?.salat = tamagotchi.value?.salat?.plus(1)!!
 
-                "toilet_paper" -> tamagotchi.value?.toiletPaper = tamagotchi.value?.toiletPaper?.plus(1)!!
+                "toilet_paper" -> tamagotchi.value?.toiletPaper =
+                    tamagotchi.value?.toiletPaper?.plus(1)!!
             }
             repo.insertTamagotchiStats(tamagotchi.value!!)
         }
@@ -85,64 +109,72 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun removeItem(item: String) {
         viewModelScope.launch {
-            when(item) {
+            when (item) {
                 "tennisball" -> {
-                        tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.minus(1)!!
-                        tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(15)!!
-                        setTime(LocalDateTime.now().toString())
+                    tamagotchi.value?.tennisBall = tamagotchi.value?.tennisBall?.minus(1)!!
+                    tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(15)!!
+                    setTime(LocalDateTime.now().toString())
                 }
 
                 "football" -> {
-                        tamagotchi.value?.footBall = tamagotchi.value?.footBall?.minus(1)!!
-                        tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(20)!!
+                    tamagotchi.value?.footBall = tamagotchi.value?.footBall?.minus(1)!!
+                    tamagotchi.value?.joy = tamagotchi.value?.joy?.plus(20)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "apple" -> {
-                        tamagotchi.value?.apple = tamagotchi.value?.apple?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    tamagotchi.value?.apple = tamagotchi.value?.apple?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(5)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "broccoli" -> {
-                        tamagotchi.value?.broccoli = tamagotchi.value?.broccoli?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.broccoli = tamagotchi.value?.broccoli?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(10)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "peas" -> {
-                        tamagotchi.value?.peas = tamagotchi.value?.peas?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.peas = tamagotchi.value?.peas?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(10)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "strawberry" -> {
-                        tamagotchi.value?.strawberry = tamagotchi.value?.strawberry?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    tamagotchi.value?.strawberry = tamagotchi.value?.strawberry?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(5)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "pomegrenade" -> {
-                        tamagotchi.value?.pomegrenade = tamagotchi.value?.pomegrenade?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(20)!!
+                    tamagotchi.value?.pomegrenade = tamagotchi.value?.pomegrenade?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(20)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(10)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "cucumber" -> {
-                        tamagotchi.value?.cucumber = tamagotchi.value?.cucumber?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.cucumber = tamagotchi.value?.cucumber?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(10)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "kiwi" -> {
-                        tamagotchi.value?.kiwi = tamagotchi.value?.kiwi?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    tamagotchi.value?.kiwi = tamagotchi.value?.kiwi?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(5)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(5)!!
                     setTime(LocalDateTime.now().toString())
                 }
 
                 "salat" -> {
-                        tamagotchi.value?.salat = tamagotchi.value?.salat?.minus(1)!!
-                        tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.salat = tamagotchi.value?.salat?.minus(1)!!
+                    tamagotchi.value?.eat = tamagotchi.value?.eat?.plus(10)!!
+                    tamagotchi.value?.toilet = tamagotchi.value?.toilet?.minus(10)!!
                     setTime(LocalDateTime.now().toString())
                 }
 

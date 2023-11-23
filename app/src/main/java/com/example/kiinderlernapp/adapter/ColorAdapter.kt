@@ -2,6 +2,7 @@ package com.example.kiinderlernapp.adapter
 
 import android.graphics.Color
 import android.os.Handler
+import android.service.voice.VoiceInteractionSession.VisibleActivityCallback
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -36,11 +37,14 @@ class ColorAdapter(
 
         // Definiere die Aktion, wenn auf das Element geklickt wird
         holder.binding.root.setOnClickListener {
+            holder.binding.textWichColor.isVisible = false
             // Mache den Text sichtbar
             holder.binding.result.isVisible = true
             val handler = Handler()
             viewModel.textToSpeach(colorName) // Sprich den Farbnamen aus
             handler.postDelayed({ holder.binding.result.isVisible = false }, 3000) // Verstecke den Text nach 3 Sekunden
+            handler.postDelayed({ holder.binding.textWichColor.isVisible = true }, 3000)
+
         }
 
         // Wenn die Farbe Weiß ist, ändere die Textfarbe auf Schwarz

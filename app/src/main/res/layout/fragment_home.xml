@@ -22,7 +22,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="6dp"
         android:text="Kinderwelt"
         android:textColor="@color/black"
@@ -46,7 +46,7 @@
         android:id="@+id/colorGame"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="@color/red"
         android:text="@string/firstGame"
         android:textStyle="bold"
@@ -107,35 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shop" />
-
-    <Button
-        android:id="@+id/tamagotchi"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/teal"
-        android:text="Tamagotchi"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vegetableFruitQuiz" />
-
-    <Button
-        android:id="@+id/shop"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="@color/gold"
-        android:text="Shop"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tamagotchi" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -175,10 +147,10 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:backgroundTint="@color/teal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonTamagotchi" />
+        app:layout_constraintBottom_toBottomOf="@+id/buttonTamagotchi"
+        app:layout_constraintStart_toEndOf="@+id/buttonTamagotchi"
+        app:layout_constraintTop_toTopOf="@+id/buttonTamagotchi" />
 
     <ImageView
         android:id="@+id/imageButtonTamagotchi"
