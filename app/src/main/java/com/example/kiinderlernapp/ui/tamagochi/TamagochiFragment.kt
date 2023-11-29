@@ -136,7 +136,7 @@ class TamagochiFragment : Fragment() {
                     // decreaseValue läst den status des  tamagotchis sinken
                     var decreaseValue =
                         if (viewModel.tamagotchi.value!!.isSleeping) duration.toMinutes()
-                            .toInt() / 5 * 2 / 2 else duration.toMinutes().toInt() / 5 * 2
+                            .toInt() / 15 * 2 / 2 else duration.toMinutes().toInt() / 15 * 2
 
 
 
@@ -207,7 +207,7 @@ class TamagochiFragment : Fragment() {
                 binding.imageTamagotchi.setImageResource(R.drawable.shoked)
             }
 
-            if (joy < 20 && toilet < 15 && eat < 30 && sleep < 20) {
+            if (joy < 20 || toilet < 15 || eat < 30 || sleep < 20) {
                 binding.imageTamagotchi.setImageResource(R.drawable.angryred)
             }
 
