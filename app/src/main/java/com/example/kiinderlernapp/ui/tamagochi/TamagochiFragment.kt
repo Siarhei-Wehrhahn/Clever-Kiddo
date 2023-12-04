@@ -162,28 +162,30 @@ class TamagochiFragment : Fragment() {
 
                 viewModel.updateTamagotchi(viewModel.tamagotchi.value!!)
                 viewModel.insertTamagotchiStats(viewModel.tamagotchi.value!!)
+
+                viewModel.tamagotchi?.value?.let { tamagotchi ->
+                    // Überprüfen, ob bereits Werte für den heutigen Tag gesetzt wurden
+                    val today = LocalDate.now()
+
+                    if (tamagotchi.lastLoginDate == null || tamagotchi.lastLoginDate != today.toString()) {
+                        var duration = Duration.between(
+                            LocalDateTime.now().withHour(8),
+                            LocalDateTime.now()
+                        )
+
+                        tamagotchi.sleep = 100 - duration.toMinutes().toInt() / 36 * 5
+
+                        // Setze das Datum des letzten Logins auf den aktuellen Tag
+                        setLastLoginDate(today.toString())
+                    }
+                }
+
+                if (LocalTime.now().hour >= 8 && viewModel.tamagotchi.value!!.sleep <= 30) viewModel.tamagotchi.value?.sleep =
+                    100
             }
         }
 
-        viewModel.tamagotchi?.value?.let { tamagotchi ->
-            // Überprüfen, ob bereits Werte für den heutigen Tag gesetzt wurden
-            val today = LocalDate.now()
 
-            if (tamagotchi.lastLoginDate == null || tamagotchi.lastLoginDate != today.toString()) {
-                var duration = Duration.between(
-                    LocalDateTime.now().withHour(8),
-                    LocalDateTime.now()
-                )
-
-                tamagotchi.sleep = 100 - duration.toMinutes().toInt() / 36 * 5
-
-                // Setze das Datum des letzten Logins auf den aktuellen Tag
-                setLastLoginDate(today.toString())
-            }
-        }
-
-        if (LocalTime.now().hour >= 8 && viewModel.tamagotchi.value!!.sleep <= 30) viewModel.tamagotchi.value?.sleep =
-            100
 
         viewModel.tamagotchi.observe(viewLifecycleOwner) {
             if (viewModel.tamagotchi.value!!.toilet <= 0) {
@@ -567,138 +569,121 @@ class TamagochiFragment : Fragment() {
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
                     val draggedItem = event.clipData.getItemAt(0).text.toString()
+                    val tamagotchi = viewModel.tamagotchi.value
 
                     when (draggedItem) {
                         // Reaktion für Tennisball
                         "tennisball" -> {
-                            if (viewModel.tamagotchi.value?.joy!! < 85) {
+                            if (viewModel.tamagotchi.value?.joy!! <= 85) {
                                 viewModel.removeItem("tennisball")
-                                binding.imageTamagotchi.setImageResource(R.drawable.haha)
-                                jump()
-                                bigDelayToNormal()
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.haha)
+                                    jump()
+                                    bigDelayToNormal()
+                                }
                             }
                         }
 
                         // Reaktion für Fußball
                         "football" -> {
-                            if (viewModel.tamagotchi.value?.joy!! < 80) {
+                            if (viewModel.tamagotchi.value?.joy!! <= 80) {
                                 viewModel.removeItem("football")
-                                binding.imageTamagotchi.setImageResource(R.drawable.smart)
-                                jump()
-                                bigDelayToNormal()
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.smart)
+                                    jump()
+                                    bigDelayToNormal()
+                                }
                             }
                         }
 
                         "apple" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 95 && viewModel.tamagotchi.value!!.toilet >= 5) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 95) {
                                 viewModel.removeItem("apple")
-                                binding.imageTamagotchi.setImageResource(R.drawable.grinning)
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.grinning)
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
                         "broccoli" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 90) {
                                 viewModel.removeItem("broccoli")
-                                binding.imageTamagotchi.setImageResource(R.drawable.alien)
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.alien)
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
                         "peas" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 90) {
                                 viewModel.removeItem("peas")
-                                binding.imageTamagotchi.setImageResource(R.drawable.gringing2)
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.gringing2)
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
                         "strawberry" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 95 && viewModel.tamagotchi.value!!.toilet >= 5) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 95) {
                                 viewModel.removeItem("strawberry")
-                                binding.imageTamagotchi.setImageResource(R.drawable.grinning)
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.grinning)
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
                         "pomegrenade" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 80 && viewModel.tamagotchi.value!!.toilet >= 10) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 80) {
                                 viewModel.removeItem("pomegrenade")
-                                binding.imageTamagotchi.setImageResource(R.drawable.grinning)
-                                jump()
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.grinning)
+                                    jump()
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
                         "cucumber" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 90) {
                                 viewModel.removeItem("cucumber")
-                                binding.imageTamagotchi.setImageResource(R.drawable.gringing2)
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.gringing2)
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
                         "kiwi" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 95 && viewModel.tamagotchi.value!!.toilet >= 5) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 95) {
                                 viewModel.removeItem("kiwi")
-                                binding.imageTamagotchi.setImageResource(R.drawable.grinning)
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.grinning)
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
                         "salat" -> {
-                            if (viewModel.tamagotchi.value?.eat!! < 90 && viewModel.tamagotchi.value!!.toilet >= 10) {
+                            if (viewModel.tamagotchi.value?.eat!! <= 90) {
                                 viewModel.removeItem("salat")
-                                binding.imageTamagotchi.setImageResource(R.drawable.grinning)
-                                smallDelayToNormal()
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Du musst zuerst die Toilette besuchen!",
-                                    Toast.LENGTH_SHORT
-                                )
+
+                                if (tamagotchi!!.joy > 65 && tamagotchi!!.eat > 30 && tamagotchi!!.sleep > 20 && tamagotchi!!.toilet > 45) {
+                                    binding.imageTamagotchi.setImageResource(R.drawable.grinning)
+                                    smallDelayToNormal()
+                                }
                             }
                         }
 
@@ -794,25 +779,29 @@ class TamagochiFragment : Fragment() {
     }
 
     private fun powerNap() {
-        viewModel.tamagotchi.value?.isSleeping = true
-        binding.sleepModus.isVisible = true
-        binding.imageTamagotchi.setImageResource(R.drawable.sleep_smiley_)
-        binding.buttonSleep.visibility = GONE
-        binding.buttonToilet.visibility = GONE
-        binding.buttonPlay.visibility = GONE
-        binding.foodButton.visibility = GONE
+        if (viewModel.tamagotchi.value!!.sleep <= 90) {
+            viewModel.tamagotchi.value?.isSleeping = true
+            binding.sleepModus.isVisible = true
+            binding.imageTamagotchi.setImageResource(R.drawable.sleep_smiley_)
+            binding.buttonSleep.visibility = GONE
+            binding.buttonToilet.visibility = GONE
+            binding.buttonPlay.visibility = GONE
+            binding.foodButton.visibility = GONE
 
-        lifecycleScope.launch {
-            delay(5000)
-            binding.sleepModus.isVisible = false
-            viewModel.tamagotchi.value!!.isSleeping = false
-            binding.buttonSleep.visibility = VISIBLE
-            binding.buttonToilet.visibility = VISIBLE
-            binding.buttonPlay.visibility = VISIBLE
-            binding.foodButton.visibility = VISIBLE
+            lifecycleScope.launch {
+                delay(5000)
+                binding.sleepModus.isVisible = false
+                viewModel.tamagotchi.value!!.isSleeping = false
+                binding.buttonSleep.visibility = VISIBLE
+                binding.buttonToilet.visibility = VISIBLE
+                binding.buttonPlay.visibility = VISIBLE
+                binding.foodButton.visibility = VISIBLE
 
-            viewModel.tamagotchi.value!!.sleep += 10
-            binding.imageTamagotchi.setImageResource(R.drawable.happy)
+                viewModel.tamagotchi.value!!.sleep += 10
+                binding.imageTamagotchi.setImageResource(R.drawable.happy)
+            }
+        } else {
+            Toast.makeText(requireContext(),"Du bist bist ausgeschlafen!", Toast.LENGTH_SHORT).show()
         }
     }
 
