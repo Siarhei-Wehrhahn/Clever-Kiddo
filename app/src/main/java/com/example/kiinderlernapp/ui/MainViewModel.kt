@@ -28,7 +28,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val time: LiveData<String>
         get() = _time
 
-    val _score = MutableLiveData(0)
+    private val _score = MutableLiveData(0)
     val score: LiveData<Int>
         get() = _score
 
@@ -41,8 +41,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _score.value = _score.value?.minus(stars)
     }
 
+    fun setStars(star: Int) {
+        _score.value = star
+    }
+
     fun addGift() {
-        _score.value = _score.value?.plus(100)
         addItem("tennisball")
         addItem("football")
         addItem("apple")

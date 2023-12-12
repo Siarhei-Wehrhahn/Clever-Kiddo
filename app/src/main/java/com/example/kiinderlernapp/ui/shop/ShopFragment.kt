@@ -43,10 +43,12 @@ class ShopFragment : Fragment() {
 
         // Hier wird auf die SharedPreferences zugegriffen, um den Punktestand zu laden und anzuzeigen.
         val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        viewModel._score.value = sharedPref.getInt("score", 0)
+        viewModel.setStars(sharedPref.getInt("score", 0))
 
+        // Punktestand
         binding.textStarCount.text = viewModel.score.value.toString()
 
+        // Toggle Button für die sortierung der Artikel
         binding.toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
             adapter.update(getList())
         }
@@ -63,6 +65,7 @@ class ShopFragment : Fragment() {
         binding.recShop.adapter = adapter
     }
 
+    // Fun um die Artikel des shops zu sortieren
     fun getList(): List<ShopItem> {
         var list: MutableList<ShopItem> = mutableListOf()
         if (binding.toggleButton.checkedButtonIds.contains(R.id.lebensmittel)) {

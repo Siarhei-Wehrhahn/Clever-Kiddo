@@ -80,6 +80,7 @@ class TamagochiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Das ist die schlafenszeit während diese zeit ist das spiel nicht spielbar
         if (LocalTime.now().hour >= 20 || LocalTime.now().hour <= 8) {
             viewModel.tamagotchi.value!!.isSleeping = true
             binding.sleepModus.isVisible = true
@@ -110,6 +111,7 @@ class TamagochiFragment : Fragment() {
             isScreenBlocked = false
         }
 
+
         binding.textHappinesPercent.text = viewModel.tamagotchi.value?.joy.toString() + "%"
         binding.textHungryPercent.text = viewModel.tamagotchi.value?.eat.toString() + "%"
         binding.textSleepPercent.text = viewModel.tamagotchi.value?.sleep.toString() + "%"
@@ -122,6 +124,7 @@ class TamagochiFragment : Fragment() {
                 binding.textSleepPercent.text = viewModel.tamagotchi.value?.sleep.toString() + "%"
                 binding.textToiletPercent.text = viewModel.tamagotchi.value?.toilet.toString() + "%"
 
+                // Hier wird anhand der zeit zwischen den fütterungen die werte runtergesetzt nach bestimmter zeit
                 delay(1000)
                 var duration = Duration.between(
                     LocalDateTime.parse(viewModel.tamagotchi.value!!.time),
@@ -163,6 +166,7 @@ class TamagochiFragment : Fragment() {
                 viewModel.updateTamagotchi(viewModel.tamagotchi.value!!)
                 viewModel.insertTamagotchiStats(viewModel.tamagotchi.value!!)
 
+                // Hier wird beim joinen der schlafenswert berrechnet mit einer formel die von 8 uhr morgens bis zum eiloggen die zeit nimmt und anhand dessen den wert berrechnet
                 viewModel.tamagotchi?.value?.let { tamagotchi ->
                     // Überprüfen, ob bereits Werte für den heutigen Tag gesetzt wurden
                     val today = LocalDate.now()
@@ -188,12 +192,14 @@ class TamagochiFragment : Fragment() {
 
 
         viewModel.tamagotchi.observe(viewLifecycleOwner) {
+            // Tamagotchi legt einen haufen auf den boden wenn der wert auf 0 oder drunter rutscht
             if (viewModel.tamagotchi.value!!.toilet <= 0) {
                 binding.imageShit.visibility = VISIBLE
             } else {
                 binding.imageShit.visibility = GONE
             }
 
+            // Gesichtsausdrücke ändern sich je nacht werte
             var joy = viewModel.tamagotchi.value!!.joy
             var toilet = viewModel.tamagotchi.value!!.toilet
             var eat = viewModel.tamagotchi.value!!.eat
@@ -234,6 +240,7 @@ class TamagochiFragment : Fragment() {
             powerNap()
         }
 
+        // Die Essensauswahl wenn etwas nicht da ist wird es auch nicht angezeigt
         binding.foodButton.setOnClickListener {
             binding.imageToiletpaper.visibility = GONE
             val tamagotchi = viewModel.tamagotchi.value
@@ -276,6 +283,7 @@ class TamagochiFragment : Fragment() {
                 binding.imageKiwi.visibility = VISIBLE
             }
 
+            // wenn etwas vorrätig ist das wird die essensauswahl animiert geöffnet
             if (tamagotchi?.apple != 0 ||
                 tamagotchi?.broccoli != 0 ||
                 tamagotchi?.peas != 0 ||
@@ -311,6 +319,7 @@ class TamagochiFragment : Fragment() {
             }
         }
 
+        // Es erscheinen 2 bälle falls vorrätig und alles andere geht zu falls geöffnet
         binding.buttonPlay.setOnClickListener {
             binding.imageToiletpaper.visibility = GONE
             if (binding.feddingScrollV.scaleX == 1f) {
@@ -340,6 +349,7 @@ class TamagochiFragment : Fragment() {
             }
         }
 
+        // Es erscheint toiletttenpapier und alles andere geht zu
         binding.buttonToilet.setOnClickListener {
             binding.imageFotball.isVisible = false
             binding.imageTennisball.isVisible = false
@@ -363,11 +373,11 @@ class TamagochiFragment : Fragment() {
                     requireContext(),
                     "Du hast leider kein Toilettenpapier!",
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
             }
         }
 
+        // Ab hier fangen die setOnTouchListener an welches für das drag and drop system verantwortlich ist
         binding.imageToiletpaper.setOnTouchListener { view, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 val clipData = ClipData.newPlainText("", "toilet_paper")
@@ -565,6 +575,7 @@ class TamagochiFragment : Fragment() {
             }
         }
 
+        // Und hier ist das gegenstück der setOnDragListener der für die ausführung der fun verantwortlich ist je nach dem welches item gedropt wird
         binding.imageTamagotchi.setOnDragListener { _, event ->
             when (event.action) {
                 DragEvent.ACTION_DROP -> {
@@ -731,6 +742,7 @@ class TamagochiFragment : Fragment() {
         }
     }
 
+    // Animation zun springen und drehen
     fun jump() {
         var jumpUp = TranslateAnimation(0f, 0f, 0f, -400f)
         var rotation = RotateAnimation(
@@ -750,6 +762,7 @@ class TamagochiFragment : Fragment() {
         binding.imageTamagotchi.startAnimation(animationSet)
     }
 
+    // 1
     private fun bigDelayToNormal() {
         lifecycleScope.launch {
             delay(1000)

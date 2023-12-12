@@ -2,6 +2,7 @@ package com.example.kiinderlernapp.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,7 +57,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Hier wird auf die SharedPreferences zugegriffen, um den Punktestand zu laden und anzuzeigen.
         val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        viewModel._score.value = sharedPref.getInt("score", 0)
+        viewModel.setStars(sharedPref.getInt("score", viewModel.score.value!!))
+        Log.e("Winning", "HomeFragment: ${viewModel.score.value}")
 
         binding.textScore.text = viewModel.score.value.toString()
 

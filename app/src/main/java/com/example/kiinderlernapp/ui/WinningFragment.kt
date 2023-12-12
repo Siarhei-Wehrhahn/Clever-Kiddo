@@ -2,6 +2,7 @@ package com.example.kiinderlernapp.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,7 @@ class WinningFragment : Fragment() {
         editor.putInt("score", viewModel.score.value!!)
         editor.apply()
 
+        Log.e("Winning", "ScoreWinningFragment: ${viewModel.score.value}")
         // Eine Verzögerung von 3 Sekunden, bevor zur vorherigen Ansicht zurücknavigiert wird
         lifecycleScope.launch {
             delay(2000)

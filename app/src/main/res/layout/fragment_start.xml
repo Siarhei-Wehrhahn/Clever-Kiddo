@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="280dp"
         android:layout_marginEnd="4dp"
-        android:text="Kinderwelt"
+        android:text="Clever Kiddo"
         android:textColor="@color/black"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"

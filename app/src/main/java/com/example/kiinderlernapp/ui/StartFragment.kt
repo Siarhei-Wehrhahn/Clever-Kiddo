@@ -2,6 +2,7 @@ package com.example.kiinderlernapp.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,6 +76,15 @@ class StartFragment : Fragment() {
             findNavController().navigate(R.id.action_startFragment_to_homeFragment)
         }
 
+        // Ein SharedPreferences-Objekt erstellen, um die Punktzahl zu speichern
+        val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+
+        // Die aktuelle Punktzahl im SharedPreferences speichern
+        viewModel.setStars(sharedPref.getInt("score", viewModel.score.value!!))
+
+        Log.e("Winning", "startFragment: ${viewModel.score.value}")
+
         binding.imageGif.setOnClickListener {
             clickCount++
 
@@ -82,13 +92,7 @@ class StartFragment : Fragment() {
                 viewModel.addGift()
                 showGiftAlert()
                 viewModel.tamagotchi.value!!.giftActivated = true
-
-                // Ein SharedPreferences-Objekt erstellen, um die Punktzahl zu speichern
-                val sharedPref = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-                val editor = sharedPref.edit()
-
-                // Die aktuelle Punktzahl im SharedPreferences speichern
-                editor.putInt("score", viewModel.score.value!!)
+                editor.putInt("score", viewModel.score.value!! + 1000)
                 editor.apply()
             }
         }

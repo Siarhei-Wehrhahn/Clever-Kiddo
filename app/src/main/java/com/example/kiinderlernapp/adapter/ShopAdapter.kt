@@ -32,7 +32,7 @@ class ShopAdapter(
         var item = shopItems[position]
         // Hier wird auf die SharedPreferences zugegriffen, um den Punktestand zu laden und anzuzeigen.
         val sharedPref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        viewModel._score.value = sharedPref.getInt("score", 0)
+        viewModel.setStars(sharedPref.getInt("score", 0))
 
         holder.binding.imageItem.setImageResource(item.res)
         holder.binding.textItemPrice.text = item.price.toString()

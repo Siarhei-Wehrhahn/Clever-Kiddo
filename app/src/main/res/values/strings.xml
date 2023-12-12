@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name"><font color="#FF0000">K</font><font color="#FF8000">i</font><font color="#FFFF00">n</font><font color="#007940">d</font><font color="#4040FF">e</font><font color="#A000C0">r</font><font color="#FF0000">w</font><font color="#FF8000">e</font><font color="#FFFF00">l</font><font color="#007940">t</font></string>
+    <string name="app_name"><font color="#FF0000">C</font><font color="#FF8000">l</font><font color="#FFFF00">e</font><font color="#007940">v</font><font color="#4040FF">e</font><font color="#A000C0">r</font><font color="#FF0000"> </font><font color="#FF8000">K</font><font color="#FFFF00">i</font><font color="#007940">d</font><font color="#4040FF">d</font><font color="#A000C0">o</font></string>
+
     <string name="Beschreibung"><font color="#FF0000">F</font><font color="#FF8000">a</font><font color="#FFFF00">r</font><font color="#007940">b</font><font color="#4040FF">e</font><font color="#A000C0">n</font>, <font color="#FF0000">Z</font><font color="#FF8000">a</font><font color="#FFFF00">h</font><font color="#007940">l</font><font color="#4040FF">e</font><font color="#A000C0">n</font>, <font color="#FF0000">T</font><font color="#FF8000">i</font><font color="#FFFF00">e</font><font color="#007940">r</font><font color="#4040FF">e</font> &amp; <font color="#A000C0">m</font><font color="#FF0000">e</font><font color="#FF8000">h</font><font color="#FFFF00">r</font></string>
     <string name="firstGame">Farben</string>
     <string name="numberGame">Zahlen</string>
